@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: 1day 1baek
+  config:
+    import:
+      - optional:classpath:/secrets.yml
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  devtools:
+    livereload:
+      enabled: true
+
+server:
+  port: 8080

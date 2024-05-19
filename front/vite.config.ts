@@ -8,7 +8,11 @@ export default defineConfig({
   define: {
     global: {},
   },
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxImportSource: '@emotion/react',
+    }),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',

@@ -31,7 +31,8 @@
       "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"],
       "@interfaces/*": ["src/interfaces/*"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@tests/*": ["src/tests/*"]
     }
   },
   "include": ["src", "vite.config.ts"],

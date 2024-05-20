@@ -10,8 +10,8 @@ interface IButtonActionProps extends IButtonProps {
 }
 
 const StyledButton = styled.button<IButtonActionProps>`
-  width: ${({ width }) => (width === '100%' ? '100%' : `${width}`)};
-  height: ${({ height }) => (height === '100%' ? '100%' : `${height}`)};
+  width: ${({ width }) => width || 'auto'};
+  height: ${({ height }) => height || 'auto'};
   color: ${({ color }) => color || 'inherit'};
   background-color: ${({ backgroundColor }) =>
     backgroundColor || 'transparent'};

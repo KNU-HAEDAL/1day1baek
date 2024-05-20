@@ -1,11 +1,11 @@
 import { Outlet, useNavigation } from 'react-router-dom';
 
+import MainNavigation from '@/components/header/MainNavigation';
 import styled from '@emotion/styled';
 
 const MainContent = styled.main`
-  padding-top: 45px;
   width: 100%;
-  height: calc(auto - 45px);
+  height: auto;
   overflow: hidden;
 `;
 
@@ -14,7 +14,7 @@ const RootPage = () => {
 
   return (
     <>
-      {/* navigation component와야함 */}
+      <MainNavigation />
       <MainContent>
         {navigation.state === 'loading' && <p>Loading...</p>}
         <Outlet />

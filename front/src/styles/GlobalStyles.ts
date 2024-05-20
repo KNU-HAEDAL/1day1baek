@@ -12,7 +12,7 @@ const sizeXs = '0.75rem'; // 12px
 //color 정의
 const colorWhite = '#FFFFFF';
 const colorBlack = '#000000';
-const colorGrey = '#d9d9d9';
+const colorGray = '#d9d9d9';
 const colorBlue = '#4285F4';
 const colorRed = '#DB4437';
 const colorGreen = '#0F9D58';
@@ -32,7 +32,7 @@ export const GlobalStyle = css`
 
     --color-white: ${colorWhite};
     --color-black: ${colorBlack};
-    --color-grey: ${colorGrey};
+    --color-gray: ${colorGray};
     --color-blue: ${colorBlue};
     --color-red: ${colorRed};
     --color-green: ${colorGreen};

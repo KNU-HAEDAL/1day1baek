@@ -47,7 +47,6 @@ export const GlobalStyle = css`
     margin: 0;
     padding: 0;
     width: 100vw;
-    height: 100vh;
     font-family: 'Noto+Sans', monospace;
     background-color: var(--color-white);
     color: var(--color-black);

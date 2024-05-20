@@ -53,6 +53,8 @@ module.exports = {
     'react/no-unknown-property': 'off',
     // 정의한 props 중에 빠진게 있는지 체크 (NextPage 등 일부 추상화 컴포넌트에서 복잡해지므로 기본은 off)
     'react/prop-types': 'off',
+    // typedef-var 규칙 비활성화
+    '@rushstack/typedef-var': 'off',
   },
 };
 

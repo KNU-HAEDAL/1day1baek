@@ -12,6 +12,12 @@ spring:
   devtools:
     livereload:
       enabled: true
+  security:
+    oauth2.client:
+      registration:
+        github:
+          client-id: fd567229463b6f2452fb
+
 
 server:
   port: 8080

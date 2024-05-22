@@ -23,5 +23,5 @@ server:
 
 custom:
   client:
-    domain: localhost
+    domain: http://localhost
     port: 5173

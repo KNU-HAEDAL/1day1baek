@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import knu.dong.onedayonebaek.oauth.dto.Token
 import knu.dong.onedayonebaek.oauth.dto.UserDto
+import knu.dong.onedayonebaek.oauth.dto.toEntity
 import knu.dong.onedayonebaek.oauth.service.TokenService
+import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -19,9 +21,10 @@ private val myLogger = KotlinLogging.logger {}
 
 @Component
 class OAuth2SuccessHandler(
-    @Value("\${custom.client.domain}") private var clientDomain: String,
-    @Value("\${custom.client.port}") private var clientPort: String,
-    private val tokenService: TokenService
+    @Value("\${custom.client.domain}") private val clientDomain: String,
+    @Value("\${custom.client.port}") private val clientPort: String,
+    private val tokenService: TokenService,
+    private val userRepository: UserRepository
 ): SimpleUrlAuthenticationSuccessHandler() {
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
@@ -37,19 +40,19 @@ class OAuth2SuccessHandler(
             attributes["profileUrl"] as String
         )
 
-        // TODO DB 연결 후 최초 로그인이라면 회원가입 처리
+        if (!userRepository.existsByLoginId(userDto.loginId)) {
+            userRepository.save(userDto.toEntity())
+        }
 
-        myLogger.info{ "토큰 발행 시작" }
+        val token: Token = tokenService.generateToken(userDto.loginId, "USER")
 
-        val token: Token = tokenService.generateToken(userDto.id, "USER")
-
-        response.contentType = "text/html;charset=UTF-8"
-        response.contentType = "application/json;charset=UTF-8"
         response.addHeader("Authorization", token.accessToken)
         response.addHeader("Refresh", token.refreshToken)
 
         val targetUrl = UriComponentsBuilder
-            .fromUriString("$clientDomain:$clientPort/")
+            .fromUriString("$clientDomain:$clientPort")
+            .queryParam("code", token.accessToken)
+            .queryParam("refresh", token.refreshToken)
             .build().toUriString();
 
         redirectStrategy.sendRedirect(request, response, targetUrl)

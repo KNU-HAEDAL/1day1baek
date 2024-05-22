@@ -16,7 +16,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['/src/tests/setup.ts'],
+    setupFiles: ['/src/setup.ts'],
   },
   resolve: {
     alias: [
@@ -31,7 +31,6 @@ export default defineConfig({
       { find: '@services', replacement: '/src/services' },
       { find: '@constants', replacement: '/src/constants' },
       { find: '@interfaces', replacement: '/src/interfaces' },
-      { find: '@tests', replacement: '/src/tests' },
       { find: '@mocks', replacement: '/src/mocks' },
     ],
   },

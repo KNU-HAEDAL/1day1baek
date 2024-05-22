@@ -33,7 +33,6 @@
       "@utils/*": ["src/utils/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@constants/*": ["src/constants/*"],
-      "@tests/*": ["src/tests/*"],
       "@mocks/*": ["src/mocks/*"]
     }
   },

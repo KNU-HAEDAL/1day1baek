@@ -39,6 +39,8 @@ module.exports = {
         elements: ['img'],
       },
     ],
+
+    '@typescript-eslint/no-floating-promises': 'off',
     // 유효한 aria-* 속성만 사용
     'jsx-a11y/aria-props': 'warn',
     // 유효한 aria-* 상태/값만 사용

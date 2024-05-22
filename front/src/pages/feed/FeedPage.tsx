@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 
 import { StyleCalendar } from '@pages/feed/components/Calendar';
 import ProblemList from '@pages/feed/components/ProblemList';
+import Profile from '@pages/feed/components/Profile';
 
 import { useFeedStore } from '@stores/useFeedStore';
 
@@ -64,6 +65,21 @@ const FeedLayout = styled.div`
   }
 `;
 
+const CalendarLayout = styled.div`
+  display: flex;
+  height: 473px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ProfileWrapper = styled.div`
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  margin-bottom: 20px;
+`;
+
 const FeedPage = () => {
   const { selectedDate, setSelectedDate } = useFeedStore();
 
@@ -83,19 +99,24 @@ const FeedPage = () => {
     <Layout>
       <DisplayLayout>
         <FeedLayout>
-          <StyleCalendar
-            formatDay={formatDay}
-            calendarType='iso8601'
-            onClickDay={handleDateClick}
-            tileContent={({ date, view }) =>
-              view === 'month' &&
-              problemRecords.find(
-                (problem) => problem.date === dayjs(date).format('YYYY-MM-DD')
-              ) ? (
-                <div className='react-calendar__tile--dot'></div>
-              ) : null
-            }
-          />
+          <CalendarLayout>
+            <ProfileWrapper>
+              <Profile />
+            </ProfileWrapper>
+            <StyleCalendar
+              formatDay={formatDay}
+              calendarType='iso8601'
+              onClickDay={handleDateClick}
+              tileContent={({ date, view }) =>
+                view === 'month' &&
+                problemRecords.find(
+                  (problem) => problem.date === dayjs(date).format('YYYY-MM-DD')
+                ) ? (
+                  <div className='react-calendar__tile--dot'></div>
+                ) : null
+              }
+            />
+          </CalendarLayout>
           {selectedDate &&
           problemRecords.find((problem) => problem.date === formattedDate) ? (
             <ProblemList

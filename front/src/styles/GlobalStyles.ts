@@ -14,9 +14,12 @@ const colorWhite = '#FFFFFF';
 const colorBlack = '#000000';
 const colorGray = '#d9d9d9';
 const colorBlue = '#4285F4';
-const colorRed = '#DB4437';
-const colorGreen = '#0F9D58';
-const colorYellow = '#F4B400';
+const colorRed = '#ff6f61';
+const colorLightYellow = '#fff5e6';
+const colorBorderYellow = '#ffebcd';
+const colorSpacePrimary = '#04094f';
+const colorSpaceSecondary = '#2f199b';
+const colorSpaceTertiary = '#4d179b';
 
 export const GlobalStyle = css`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap');
@@ -35,8 +38,11 @@ export const GlobalStyle = css`
     --color-gray: ${colorGray};
     --color-blue: ${colorBlue};
     --color-red: ${colorRed};
-    --color-green: ${colorGreen};
-    --color-yellow: ${colorYellow};
+    --color-lyellow: ${colorLightYellow};
+    --color-byellow: ${colorBorderYellow};
+    --color-space-primary: ${colorSpacePrimary};
+    --color-space-secondary: ${colorSpaceSecondary};
+    --color-space-tertiary: ${colorSpaceTertiary};
   }
 
   * {

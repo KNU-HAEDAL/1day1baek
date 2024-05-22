@@ -12,6 +12,7 @@ const StyledText = styled.p<ITextProps>`
   font-size: ${({ size }) => size || '1rem'};
   font-weight: ${({ weight }) => weight || 'normal'};
   color: ${({ color }) => color || 'inherit'};
+  margin: 0;
 `;
 
 const Text = ({

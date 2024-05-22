@@ -32,6 +32,7 @@ export default defineConfig({
       { find: '@constants', replacement: '/src/constants' },
       { find: '@interfaces', replacement: '/src/interfaces' },
       { find: '@tests', replacement: '/src/tests' },
+      { find: '@mocks', replacement: '/src/mocks' },
     ],
   },
 });

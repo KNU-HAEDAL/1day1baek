@@ -55,6 +55,8 @@ module.exports = {
     'react/prop-types': 'off',
     // typedef-var 규칙 비활성화
     '@rushstack/typedef-var': 'off',
+    // null 사용은 레거시 API를 설명할 때에만 허용되며, 이 경우를 제외하고는 "undefined"를 사용해야 합니다.
+    '@rushstack/no-new-null': 'off',
   },
 };
 

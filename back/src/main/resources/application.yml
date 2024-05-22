@@ -18,6 +18,10 @@ spring:
         github:
           client-id: fd567229463b6f2452fb
 
-
 server:
   port: 8080
+
+custom:
+  client:
+    domain: localhost
+    port: 5173

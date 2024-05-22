@@ -1,29 +1,40 @@
+import dayjs from 'dayjs';
 import { describe, it, expect } from 'vitest';
 
 import FeedPage from '@pages/feed/FeedPage';
 
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 
 describe('FeedPage', () => {
   it('should render without crashing', () => {
     render(<FeedPage />);
   });
 
-  // date가 20인 날짜를 클릭하면 문제와 난이도가 표시되어야 합니다.
-  it('should display problem and difficulty when a date with a problem is clicked', () => {
+  it('should display problems and their difficulties when a date with records is clicked', () => {
     const { getByText } = render(<FeedPage />);
-    const dateWithProblem = getByText('20');
-    fireEvent.click(dateWithProblem);
-    expect(getByText('문제: 토마토 난이도: gold4')).toBeInTheDocument();
+    const testDate = new Date('2024-05-20');
+
+    // 테스트 날짜에 해당하는 캘린더 타일을 찾아 클릭합니다
+    const formattedDate = dayjs(testDate).format('D');
+    const dateTile = getByText(formattedDate);
+    fireEvent.click(dateTile);
+
+    // 클릭된 날짜에 대한 문제가 표시되는지 확인합니다
+    expect(screen.getByText('토마토')).toBeInTheDocument();
+    expect(screen.getAllByText('gold4').length).toBeGreaterThanOrEqual(4);
   });
 
-  // 문제와 난이도를 클릭하면 코드가 표시되어야 합니다.
-  it('should display code when the problem and difficulty are clicked', () => {
+  it('should not display problems when a date without records is clicked', () => {
     const { getByText } = render(<FeedPage />);
-    const dateWithProblem = getByText('20');
-    fireEvent.click(dateWithProblem);
-    const problemAndDifficulty = getByText('문제: 토마토 난이도: gold4');
-    fireEvent.click(problemAndDifficulty);
-    expect(getByText('해결한 코드')).toBeInTheDocument();
+    const testDate = new Date('2024-05-21');
+
+    // 테스트 날짜에 해당하는 캘린더 타일을 찾아 클릭합니다
+    const formattedDate = dayjs(testDate).format('D');
+    const dateTile = getByText(formattedDate);
+    fireEvent.click(dateTile);
+
+    // 클릭된 날짜에 대한 문제가 표시되는지 확인합니다
+    expect(screen.queryByText('토마토')).toBeNull();
+    expect(screen.queryByText('gold4')).toBeNull();
   });
 });

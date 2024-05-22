@@ -23,6 +23,7 @@ export default defineConfig({
       { find: '@', replacement: '/src' },
       { find: '@assets', replacement: '/src/assets' },
       { find: '@styles', replacement: '/src/styles' },
+      { find: '@stores', replacement: '/src/stores' },
       { find: '@components', replacement: '/src/components' },
       { find: '@pages', replacement: '/src/pages' },
       { find: '@hooks', replacement: '/src/hooks' },
@@ -31,6 +32,7 @@ export default defineConfig({
       { find: '@constants', replacement: '/src/constants' },
       { find: '@interfaces', replacement: '/src/interfaces' },
       { find: '@tests', replacement: '/src/tests' },
+      { find: '@mocks', replacement: '/src/mocks' },
     ],
   },
 });

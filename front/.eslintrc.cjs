@@ -39,6 +39,8 @@ module.exports = {
         elements: ['img'],
       },
     ],
+
+    '@typescript-eslint/no-floating-promises': 'off',
     // 유효한 aria-* 속성만 사용
     'jsx-a11y/aria-props': 'warn',
     // 유효한 aria-* 상태/값만 사용
@@ -55,6 +57,8 @@ module.exports = {
     'react/prop-types': 'off',
     // typedef-var 규칙 비활성화
     '@rushstack/typedef-var': 'off',
+    // null 사용은 레거시 API를 설명할 때에만 허용되며, 이 경우를 제외하고는 "undefined"를 사용해야 합니다.
+    '@rushstack/no-new-null': 'off',
   },
 };
 

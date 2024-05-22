@@ -3,6 +3,7 @@ import { MouseEventHandler } from 'react';
 export interface IButtonProps {
   onClick: MouseEventHandler<HTMLSpanElement>;
   color?: string;
+  fontSize?: string;
   backgroundColor?: string;
   hoverColor?: string;
   hoverBackgroundColor?: string;

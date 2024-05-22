@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
 import org.springframework.web.filter.OncePerRequestFilter
 
 
@@ -13,18 +14,16 @@ class JwtExceptionFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        response.characterEncoding = "utf-8"
-
         try {
             filterChain.doFilter(request, response)
-        } catch (e: Error) {
+        } catch (e: AccessTokenExpiredException) {
             val objectMapper = ObjectMapper()
 
             val map: MutableMap<String, String> = HashMap()
-            map["errortype"] = "Forbidden"
-            map["code"] = "403"
-            map["message"] = "잘못된 토큰입니다."
+            map["code"] = "access_token_expired"
+            map["http_status_code"] = "401"
 
+            response.contentType = "application/json;charset=UTF-8"
             response.writer.write(objectMapper.writeValueAsString(map))
         }
     }

@@ -51,7 +51,7 @@ class OAuth2SuccessHandler(
 
         val targetUrl = UriComponentsBuilder
             .fromUriString("$clientDomain:$clientPort")
-            .queryParam("code", token.accessToken)
+            .queryParam("access", token.accessToken)
             .queryParam("refresh", token.refreshToken)
             .build().toUriString();
 

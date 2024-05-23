@@ -17,7 +17,9 @@ spring:
       registration:
         github:
           client-id: fd567229463b6f2452fb
-
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
 server:
   port: 8080
 

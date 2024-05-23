@@ -21,8 +21,9 @@ class JwtExceptionFilter : OncePerRequestFilter() {
 
             val map: MutableMap<String, String> = HashMap()
             map["code"] = "access_token_expired"
-            map["http_status_code"] = "401"
+            map["message"] = "Access token expired"
 
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.contentType = "application/json;charset=UTF-8"
             response.writer.write(objectMapper.writeValueAsString(map))
         }

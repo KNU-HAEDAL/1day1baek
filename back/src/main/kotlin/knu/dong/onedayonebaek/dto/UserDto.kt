@@ -15,4 +15,4 @@ data class UserDto(
 )
 
 fun UserDto.toEntity() = User(loginId, name, profileUrl)
-fun User.fromEntity() = UserDto(loginId, name, profileUrl)
+fun User.toUserDto() = UserDto(loginId, name, profileUrl)

@@ -58,7 +58,6 @@ class TokenService(@Value("\${custom.security.secret-key}") private var secretKe
 
             claims.body.expiration.after(Date())
         } catch (e: Exception) {
-            logger.error { e.toString() }
             false
         }
     }

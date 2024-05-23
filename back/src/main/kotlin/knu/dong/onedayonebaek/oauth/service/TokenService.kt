@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys
 import jakarta.annotation.PostConstruct
 import knu.dong.onedayonebaek.oauth.dto.Token
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.crypto.SecretKey
@@ -15,19 +16,27 @@ import javax.crypto.SecretKey
 private val logger = KotlinLogging.logger {}
 
 @Service
-class TokenService(@Value("\${custom.security.secret-key}") private var secretKey: String) {
+class TokenService(
+    @Value("\${custom.security.secret-key}") private var secretKey: String,
+    private val environment: Environment
+) {
 
     private lateinit var key: SecretKey
+    private lateinit var profile: String
 
     @PostConstruct
     protected fun init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.toByteArray())
         key = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharset.UTF_8))
+
+        profile = environment.activeProfiles.getOrElse(0) { "prod" }
     }
 
 
     fun generateToken(id: String, role: String): Token {
-        val tokenPeriod = 1000L * 60L * 10L
+        val tokenPeriod =
+            if (profile == "develop") { 1000L * 60L * 60L }
+            else { 1000L * 60L * 10L }
         val refreshPeriod = 1000L * 60L * 60L * 24L * 30L * 3L
 
         val claims = Jwts.claims().setSubject(id)

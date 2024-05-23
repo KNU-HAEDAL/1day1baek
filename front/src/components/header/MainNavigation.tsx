@@ -16,6 +16,7 @@ const MainNavigateDiv = styled.div`
 
 const MainNavigateContainer = styled.nav`
   max-width: 1024px;
+  min-width: 568px;
   width: calc(100% - 124px);
   height: 100%;
   padding: 0 62px 0 62px;

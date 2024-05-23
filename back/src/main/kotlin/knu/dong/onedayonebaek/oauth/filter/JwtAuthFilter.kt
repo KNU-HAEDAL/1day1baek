@@ -5,9 +5,9 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
-import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
 import knu.dong.onedayonebaek.dto.UserDto
-import knu.dong.onedayonebaek.dto.fromEntity
+import knu.dong.onedayonebaek.dto.toUserDto
+import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
 import knu.dong.onedayonebaek.oauth.service.TokenService
 import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -51,7 +51,7 @@ class JwtAuthFilter(
                     val loginId = tokenService.getUid(accessToken)
 
                     val user = userRepository.findByLoginId(loginId)
-                    val userDto = user.fromEntity()
+                    val userDto = user.toUserDto()
 
                     val auth: Authentication = getAuthentication(userDto)
                     SecurityContextHolder.getContext().authentication = auth

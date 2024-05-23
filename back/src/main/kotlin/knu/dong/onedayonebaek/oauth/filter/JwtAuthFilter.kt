@@ -6,8 +6,8 @@ import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
-import knu.dong.onedayonebaek.oauth.dto.UserDto
-import knu.dong.onedayonebaek.oauth.dto.fromEntity
+import knu.dong.onedayonebaek.dto.UserDto
+import knu.dong.onedayonebaek.dto.fromEntity
 import knu.dong.onedayonebaek.oauth.service.TokenService
 import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

@@ -1,6 +1,6 @@
 package knu.dong.onedayonebaek.controller
 
-import knu.dong.onedayonebaek.oauth.dto.UserDto
+import knu.dong.onedayonebaek.dto.UserDto
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

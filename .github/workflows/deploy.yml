@@ -39,6 +39,7 @@ jobs:
             server_pid=(${server_process// / })
             server_pid=${server_pid[1]}
 
+            echo $server_pid
             if [ -n "$server_pid" ]; then
               echo test123123123
               echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid

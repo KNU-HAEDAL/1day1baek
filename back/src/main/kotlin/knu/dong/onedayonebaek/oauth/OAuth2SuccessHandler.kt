@@ -3,9 +3,9 @@ package knu.dong.onedayonebaek.oauth
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import knu.dong.onedayonebaek.oauth.dto.Token
 import knu.dong.onedayonebaek.dto.UserDto
 import knu.dong.onedayonebaek.dto.toEntity
+import knu.dong.onedayonebaek.oauth.dto.Token
 import knu.dong.onedayonebaek.oauth.service.TokenService
 import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
@@ -50,7 +50,7 @@ class OAuth2SuccessHandler(
         response.addHeader("Refresh", token.refreshToken)
 
         val targetUrl = UriComponentsBuilder
-            .fromUriString("$clientDomain:$clientPort")
+            .fromUriString("$clientDomain:$clientPort/login/code")
             .queryParam("access", token.accessToken)
             .queryParam("refresh", token.refreshToken)
             .build().toUriString();

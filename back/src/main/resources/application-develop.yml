@@ -3,8 +3,8 @@ spring:
     oauth2.client:
       registration:
         github:
-          client-id: fd567229463b6f2452fb
+          client-id: Ov23likkkIMIFQYOM514
 custom:
   client:
-    domain: http://haedal.iptime.org
+    domain: http://localhost
     port: 5173

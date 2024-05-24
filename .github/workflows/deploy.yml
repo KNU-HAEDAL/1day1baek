@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.REMOTE_SSH_PASSWORD }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           envs: BRANCH_NAME, REMOTE_SSH_PASSWORD
-          script_stop: true
+          # script_stop: true
           script: |
             cd workspaces/1day1baek/back
 
@@ -34,9 +34,7 @@ jobs:
             if [ "$cur_git_branch" != "$BRANCH_NAME" ]; then
               git switch deploy/33-BE_cd
             fi
-            echo TTTT
             git pull origin deploy/33-BE_cd
-            echo TTTT2
 
             server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$ | grep java)
             server_pid=(${server_process// / })

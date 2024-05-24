@@ -49,4 +49,6 @@ jobs:
             . ~/.asdf/plugins/java/set-java-home.bash
 
             echo $JAVA_HOME
+            echo TTTTTTTTTTTTTTTTTTTTTT
+
             # ./run_sandbox.sh

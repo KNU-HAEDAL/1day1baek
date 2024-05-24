@@ -37,6 +37,6 @@ jobs:
             server_pid=(${server_process// / })
             server_pid=${server_pid[1]}
 
-            # echo $REMOTE_SSH_PASSWORD | sudo kill -9 $server_pid
+            echo $REMOTE_SSH_PASSWORD | sudo kill -9 $server_pid
 
             # ./run_sandbox.sh

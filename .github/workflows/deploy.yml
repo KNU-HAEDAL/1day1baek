@@ -26,6 +26,8 @@ jobs:
           envs: BRANCH_NAME, REMOTE_SSH_PASSWORD
           script_stop: true
           script: |
+            echo $BRANCH_NAME
+
             cd workspaces/1day1baek/back
 
             git reset --hard HEAD

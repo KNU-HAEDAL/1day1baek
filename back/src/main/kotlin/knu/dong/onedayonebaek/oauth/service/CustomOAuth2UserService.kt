@@ -1,6 +1,5 @@
 package knu.dong.onedayonebaek.oauth.service
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
@@ -22,8 +21,7 @@ class CustomOAuth2UserService: OAuth2UserService<OAuth2UserRequest, OAuth2User> 
         val memberAttribute: MutableMap<String, Any> = HashMap()
         memberAttribute["id"] = attributes["login"]!!
         memberAttribute["key"] = attributes["login"]!!
-        memberAttribute["name"] = attributes["name"]!!
-        memberAttribute["email"] = attributes["email"]!!
+        memberAttribute["name"] = attributes["name"]?: ""
         memberAttribute["profileUrl"] = attributes["avatar_url"]!!
 
         return DefaultOAuth2User(

@@ -39,8 +39,9 @@ jobs:
             server_pid=(${server_process// / })
             server_pid=${server_pid[1]}
 
-            echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
-            sleep 5
+            if [ -n "$server_pid" ]; then
+              echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
+            fi
 
             echo TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
             ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar | grep java

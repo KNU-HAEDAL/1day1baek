@@ -37,7 +37,7 @@ jobs:
             git pull origin $BRANCH_NAME
             echo 2222222222222222222222222222222222
 
-            server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$ | grep java)
+            server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$)
             echo 333333333333333333333333333333333
 
             if [ -n "$server_process" ]; then

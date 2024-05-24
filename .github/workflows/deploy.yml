@@ -30,7 +30,7 @@ jobs:
 
             git reset --hard HEAD
             git switch deploy/33-BE_cd
-            git pull
+            git pull origin deploy/33-BE_cd
 
             server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$ | grep java)
             server_pid=(${server_process// / })

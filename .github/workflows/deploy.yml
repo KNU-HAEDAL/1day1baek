@@ -21,9 +21,8 @@ jobs:
           username: ${{ secrets.REMOTE_SSH_USERNAME }}
           password: ${{ secrets.REMOTE_SHH_PASSWORD }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
+          envs: BRANCH_NAME
           script: |
-            echo $BRANCH_NAME
-
             cd workspaces/1day1baek/back
             git checkout -B $BRANCH_NAME
             git pull origin $BRANCH_NAME

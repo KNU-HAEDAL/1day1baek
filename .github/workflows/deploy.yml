@@ -32,12 +32,11 @@ jobs:
 
             cur_git_branch=$(git branch --show-current)
             if [ "$cur_git_branch" != "$BRANCH_NAME" ]; then
-              echo TTTTTTTTTTTTTTTTT
-              echo $cur_git_branch
-              echo $BRANCH_NAME
-              git checkout deploy/33-BE_cd
+              git switch deploy/33-BE_cd
             fi
+            echo TTTT
             git pull origin deploy/33-BE_cd
+            echo TTTT2
 
             server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$ | grep java)
             server_pid=(${server_process// / })

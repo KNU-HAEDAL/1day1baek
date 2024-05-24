@@ -46,6 +46,7 @@ jobs:
             #   echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
             # fi
 
+            which asdf
             asdf list
 
             ./gradlew clean build -x test

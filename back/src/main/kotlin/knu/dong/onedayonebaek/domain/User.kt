@@ -13,7 +13,10 @@ class User(
     val name: String = "",
 
     @Column(nullable = false)
-    val profileUrl: String = ""
+    val profileUrl: String = "",
+
+    @OneToMany(mappedBy = "user")
+    val groups: List<ContainGroup> = ArrayList()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

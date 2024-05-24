@@ -6,6 +6,7 @@ import knu.dong.onedayonebaek.dto.toCommitInfo
 import knu.dong.onedayonebaek.repository.CommitRepository
 import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.YearMonth
 import java.util.stream.Collectors
 
@@ -28,5 +29,15 @@ class CommitService(
         .stream()
         .map { it.toCommitInfo() }
         .collect(Collectors.toList())
+    }
+
+    fun getCommits(loginId: String, date: LocalDate): List<CommitInfo> {
+        val user = userRepository.getByLoginId(loginId)
+
+        return commitRepository
+            .findAllByCommitDateAndUser(date, user)
+            .stream()
+            .map { it.toCommitInfo() }
+            .collect(Collectors.toList())
     }
 }

@@ -1,6 +1,5 @@
 package knu.dong.onedayonebaek.controller
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -13,6 +12,7 @@ import knu.dong.onedayonebaek.service.CommitService
 import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 import java.time.YearMonth
 
 
@@ -47,5 +47,31 @@ class CommitController(private val commitService: CommitService) {
         val userDto = authentication.principal as UserDto
 
         return commitService.getCommits(userDto.loginId, yearMonth)
+    }
+
+    @Operation(
+        summary = "로그인된 유저의 특정 일자에 해결한 문제 개수 조회",
+        description = "로그인된 유저의 특정 일자에 해결한 문제 개수를 조회한다."
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "로그인된 유저의 특정 일자에 해당하는 해결한 문제 개수"),
+        ApiResponse(
+            responseCode = "400", description = "잘못된 Request Parameter",
+            content = [Content(schema = Schema(implementation = BadRequestResponse::class))],
+        )
+    )
+    @GetMapping("/count")
+    fun getCommitCountOfDay(
+        @Schema(
+            description = "커밋 개수를 조회하고 싶은 날짜",
+            required = true,
+            example = "2024-05-25"
+        )
+        date: LocalDate,
+        authentication: Authentication
+    ): Int {
+        val userDto = authentication.principal as UserDto
+
+        return commitService.getCommits(userDto.loginId, date).size
     }
 }

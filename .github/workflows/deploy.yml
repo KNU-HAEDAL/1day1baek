@@ -46,5 +46,6 @@ jobs:
               echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
             fi
 
-            source ~/.bashrc
-            ./run_sandbox.sh
+            ./gradlew clean build -x test
+            nohup java -Dspring.profiles.active=sandbox -jar build/libs/OneDayOneBaek-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
+            sleep 10

@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.time.YearMonth
 
-private val myLogger = KotlinLogging.logger {}
 
 @Validated
 @RestController

@@ -23,9 +23,6 @@ class CommitService(
 
         val user = userRepository.getByLoginId(loginId)
 
-        myLogger.error { "$start $end" }
-        myLogger.error { "$user" }
-
         return commitRepository
         .findAllByCommitDateBetweenAndUser(start, end, user)
         .stream()

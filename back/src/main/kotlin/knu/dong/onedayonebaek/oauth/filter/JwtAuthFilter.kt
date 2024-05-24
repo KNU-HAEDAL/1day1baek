@@ -1,6 +1,5 @@
 package knu.dong.onedayonebaek.oauth.filter
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
@@ -17,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.GenericFilterBean
 
-
-private val myLogger = KotlinLogging.logger {}
 
 @Component
 class JwtAuthFilter(

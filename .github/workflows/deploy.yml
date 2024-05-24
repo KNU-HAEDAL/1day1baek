@@ -5,8 +5,11 @@ on:
     branches: [main, deploy/33-BE_cd]
   workflow_dispatch:
 
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.3.0
@@ -19,4 +22,9 @@ jobs:
           password: ${{ secrets.REMOTE_SHH_PASSWORD }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
-            pwd
+            cd workspaces/1day1baek/back
+            git checkout -B $BRANCH_NAME
+            git pull origin $BRANCH_NAME
+
+            ./stop_server.sh
+            ./run_sandbox.sh

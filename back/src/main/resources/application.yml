@@ -12,18 +12,9 @@ spring:
   devtools:
     livereload:
       enabled: true
-  security:
-    oauth2.client:
-      registration:
-        github:
-          client-id: fd567229463b6f2452fb
 springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
 server:
   port: 8080
 
-custom:
-  client:
-    domain: http://localhost
-    port: 5173

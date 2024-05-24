@@ -26,18 +26,14 @@ jobs:
           envs: BRANCH_NAME, REMOTE_SSH_PASSWORD
           script_stop: true
           script: |
-            echo $BRANCH_NAME
-
             cd workspaces/1day1baek/back
-
-            git reset --hard HEAD
 
             echo 11111111111111111111111111111111111111111
             git checkout -B $BRANCH_NAME
             git pull origin $BRANCH_NAME
             echo 2222222222222222222222222222222222
 
-            server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$)
+            server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$ | grep java)
             echo 333333333333333333333333333333333
 
             if [ -n "$server_process" ]; then

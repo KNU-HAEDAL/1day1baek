@@ -17,7 +17,11 @@ class Group (
     val inviteCode: String?,
 
     @OneToMany(mappedBy = "group")
-    val users: List<ContainGroup> = ArrayList()
+    val users: List<ContainGroup> = ArrayList(),
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    val owner: User
 
 ) {
     @Id

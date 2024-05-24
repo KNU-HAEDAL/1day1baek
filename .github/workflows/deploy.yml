@@ -26,6 +26,9 @@ jobs:
           envs: BRANCH_NAME, REMOTE_SSH_PASSWORD
           script: |
             cd workspaces/1day1baek/back
+
+            git reset --hard HEAD
+
             git checkout -B $BRANCH_NAME
             git pull origin $BRANCH_NAME
 

@@ -48,7 +48,6 @@ jobs:
 
             . ~/.asdf/plugins/java/set-java-home.bash
 
-            echo $JAVA_HOME
-            echo TTTTTTTTTTTTTTTTTTTTTT
+            whoami
 
             # ./run_sandbox.sh

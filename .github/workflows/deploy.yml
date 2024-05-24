@@ -46,5 +46,7 @@ jobs:
               echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
             fi
 
-            # . ~/.asdf/plugins/java/set-java-home.bash
+            . ~/.asdf/plugins/java/set-java-home.bash
+
+            echo $JAVA_HOME
             # ./run_sandbox.sh

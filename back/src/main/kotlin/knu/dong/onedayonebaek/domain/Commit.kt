@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 @Entity
 @Table(name = "commits")
-data class Commit(
+class Commit(
     @Column(nullable = false)
     var commitDate: LocalDate,
 

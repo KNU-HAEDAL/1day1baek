@@ -35,7 +35,7 @@ jobs:
             git checkout -B $BRANCH_NAME
             git pull origin $BRANCH_NAME
 
-            server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar | grep java)
+            server_process=$(ps -ef | grep OneDayOneBaek-0.0.1-SNAPSHOT.jar$ | grep java)
             echo $server_process
             server_pid=(${server_process// / })
             server_pid=${server_pid[1]}

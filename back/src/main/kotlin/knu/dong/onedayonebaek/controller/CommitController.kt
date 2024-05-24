@@ -22,11 +22,11 @@ import java.time.YearMonth
 class CommitController(private val commitService: CommitService) {
 
     @Operation(
-        summary = "로그인된 유저의 커밋 조회",
-        description = "로그인된 유저의 커밋들을 조회한다."
+        summary = "로그인된 유저가 해결한 문제 목록 조회",
+        description = "로그인된 유저가 특정 달에 해결한 문제 목록을 조회한다."
     )
     @ApiResponses(
-        ApiResponse(responseCode = "200", description = "로그인된 유저의 커밋 목록 조회"),
+        ApiResponse(responseCode = "200", description = "로그인된 유저의 문제 목록 조회"),
         ApiResponse(
             responseCode = "400", description = "잘못된 Request Parameter",
             content = [Content(schema = Schema(implementation = BadRequestResponse::class))],

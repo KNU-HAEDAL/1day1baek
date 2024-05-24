@@ -1,0 +1,10 @@
+spring:
+  security:
+    oauth2.client:
+      registration:
+        github:
+          client-id: fd567229463b6f2452fb
+custom:
+  client:
+    domain: http://localhost
+    port: 5173

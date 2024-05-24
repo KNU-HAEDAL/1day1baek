@@ -14,7 +14,7 @@ class Group (
     val isPrivate: Boolean = false,
 
     @Column
-    val inviteCode: String,
+    val inviteCode: String?,
 
     @OneToMany(mappedBy = "group")
     val users: List<ContainGroup> = ArrayList()

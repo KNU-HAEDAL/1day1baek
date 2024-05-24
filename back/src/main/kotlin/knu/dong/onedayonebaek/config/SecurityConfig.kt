@@ -60,6 +60,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
         configuration.addAllowedOrigin("http://localhost:5173")
+        configuration.addAllowedOrigin("http://haedal.iptime.org:5173")
         configuration.addAllowedMethod("*")
         configuration.addAllowedHeader("*")
         configuration.addExposedHeader("*")

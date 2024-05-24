@@ -8,4 +8,5 @@ import java.time.LocalDate
 
 interface CommitRepository: JpaRepository<Commit, Long> {
     fun findAllByCommitDateBetweenAndUser(start: LocalDate, end: LocalDate, user: User): List<Commit>
+    fun findAllByCommitDateAndUser(date: LocalDate, user: User): List<Commit>
 }

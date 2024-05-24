@@ -24,6 +24,7 @@ jobs:
           password: ${{ secrets.REMOTE_SSH_PASSWORD }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           envs: BRANCH_NAME, REMOTE_SSH_PASSWORD
+          script_stop: true
           script: |
             cd workspaces/1day1baek/back
 

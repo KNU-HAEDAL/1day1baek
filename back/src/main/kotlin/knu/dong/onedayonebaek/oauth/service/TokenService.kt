@@ -13,8 +13,6 @@ import java.util.*
 import javax.crypto.SecretKey
 
 
-private val logger = KotlinLogging.logger {}
-
 @Service
 class TokenService(
     @Value("\${custom.security.secret-key}") private var secretKey: String,

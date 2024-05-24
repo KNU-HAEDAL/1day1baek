@@ -40,6 +40,7 @@ jobs:
             if [ -n "$server_process" ]; then
               server_pid=(${server_process// / })
               server_pid=${server_pid[1]}
+              echo "existed server pid : $server_pid"
 
               echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
             fi

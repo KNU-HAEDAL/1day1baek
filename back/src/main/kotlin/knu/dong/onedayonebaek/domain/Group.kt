@@ -2,6 +2,8 @@ package knu.dong.onedayonebaek.domain
 
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 
 @Entity
 @Table(name = "study_groups")

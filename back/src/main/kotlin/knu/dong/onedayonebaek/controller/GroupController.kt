@@ -13,6 +13,7 @@ import knu.dong.onedayonebaek.dto.GroupDetailDto
 import knu.dong.onedayonebaek.dto.JoinGroupRequest
 import knu.dong.onedayonebaek.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.exception.response.BadRequestResponse
+import knu.dong.onedayonebaek.exception.response.ConflictResponse
 import knu.dong.onedayonebaek.exception.response.ForbiddenResponse
 import knu.dong.onedayonebaek.exception.response.NotFoundResponse
 import knu.dong.onedayonebaek.service.GroupService
@@ -117,4 +118,23 @@ class GroupController(
 
         return groupService.joinGroup(user, groupId, requestDto.password)
     }
+
+    @Operation(
+        summary = "그룹 나가기",
+        description = "해당 그룹에서 나간다. 그룹장은 나갈 수 없다."
+    )
+    @PostMapping("/{groupId}/leave")
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "스터디 그룹 상세 정보"),
+        ApiResponse(responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class))]),
+        ApiResponse(responseCode = "409", description = "로그인된 사용자가 그룹장인 경우",
+            content = [Content(schema = Schema(implementation = ConflictResponse::class))]),
+    )
+    fun leaveGroup(@PathVariable groupId: Long, authentication: Authentication) {
+        val user = authentication.principal as User
+
+        groupService.leaveGroup(user, groupId)
+    }
+
 }

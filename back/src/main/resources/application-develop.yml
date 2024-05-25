@@ -4,6 +4,15 @@ spring:
       registration:
         github:
           client-id: Ov23likkkIMIFQYOM514
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        highlight_sql: true
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: trace
 custom:
   client:
     domain: http://localhost

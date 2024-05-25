@@ -4,13 +4,10 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
-import knu.dong.onedayonebaek.dto.UserDto
-import knu.dong.onedayonebaek.dto.toUserDto
 import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
 import knu.dong.onedayonebaek.oauth.service.TokenService
 import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
@@ -48,10 +45,11 @@ class JwtAuthFilter(
                     val loginId = tokenService.getUid(accessToken)
 
                     val user = userRepository.findByLoginId(loginId)
-                    val userDto = user.toUserDto()
 
-                    val auth: Authentication = getAuthentication(userDto)
-                    SecurityContextHolder.getContext().authentication = auth
+                    SecurityContextHolder.getContext().authentication =
+                        UsernamePasswordAuthenticationToken(
+                            user, "", listOf(SimpleGrantedAuthority("ROLE_USER"))
+                        )
                 }
                 else {
                     throw AccessTokenExpiredException()
@@ -60,13 +58,6 @@ class JwtAuthFilter(
         }
 
         chain.doFilter(request, response)
-    }
-
-    private fun getAuthentication(member: UserDto): Authentication {
-        return UsernamePasswordAuthenticationToken(
-            member, "",
-            listOf(SimpleGrantedAuthority("ROLE_USER"))
-        )
     }
 
     private fun shouldExclude(request: HttpServletRequest): Boolean {

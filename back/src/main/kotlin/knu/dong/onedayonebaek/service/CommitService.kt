@@ -1,6 +1,7 @@
 package knu.dong.onedayonebaek.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.CommitInfo
 import knu.dong.onedayonebaek.dto.toCommitInfo
 import knu.dong.onedayonebaek.repository.CommitRepository
@@ -18,22 +19,18 @@ class CommitService(
     private val userRepository: UserRepository
 ) {
 
-    fun getCommits(loginId: String, yearMonth: YearMonth): List<CommitInfo> {
+    fun getCommits(user: User, yearMonth: YearMonth): List<CommitInfo> {
         val start = yearMonth.atDay(1)
         val end = yearMonth.atEndOfMonth()
 
-        val user = userRepository.getByLoginId(loginId)
-
         return commitRepository
-        .findAllByCommitDateBetweenAndUser(start, end, user)
-        .stream()
-        .map { it.toCommitInfo() }
-        .collect(Collectors.toList())
+            .findAllByCommitDateBetweenAndUser(start, end, user)
+            .stream()
+            .map { it.toCommitInfo() }
+            .collect(Collectors.toList())
     }
 
-    fun getCommits(loginId: String, date: LocalDate): List<CommitInfo> {
-        val user = userRepository.getByLoginId(loginId)
-
+    fun getCommits(user: User, date: LocalDate): List<CommitInfo> {
         return commitRepository
             .findAllByCommitDateAndUser(date, user)
             .stream()

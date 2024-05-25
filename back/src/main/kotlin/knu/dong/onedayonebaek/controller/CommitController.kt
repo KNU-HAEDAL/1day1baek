@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.CommitInfo
-import knu.dong.onedayonebaek.dto.UserDto
 import knu.dong.onedayonebaek.exception.response.BadRequestResponse
 import knu.dong.onedayonebaek.service.CommitService
 import org.springframework.security.core.Authentication
@@ -44,9 +44,9 @@ class CommitController(private val commitService: CommitService) {
         yearMonth: YearMonth,
         authentication: Authentication
     ): List<CommitInfo> {
-        val userDto = authentication.principal as UserDto
+        val user = authentication.principal as User
 
-        return commitService.getCommits(userDto.loginId, yearMonth)
+        return commitService.getCommits(user, yearMonth)
     }
 
     @Operation(
@@ -70,8 +70,8 @@ class CommitController(private val commitService: CommitService) {
         date: LocalDate,
         authentication: Authentication
     ): Int {
-        val userDto = authentication.principal as UserDto
+        val user = authentication.principal as User
 
-        return commitService.getCommits(userDto.loginId, date).size
+        return commitService.getCommits(user, date).size
     }
 }

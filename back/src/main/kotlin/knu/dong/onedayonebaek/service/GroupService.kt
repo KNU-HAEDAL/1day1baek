@@ -69,7 +69,7 @@ class GroupService (
     fun joinGroup(user: User, groupId: Long, password: String?): GroupDetailDto {
         val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
 
-        if (group.users.any{ it.user.id == user.id }) {
+        if (containGroupRepository.existsByGroupAndUser(group, user)) {
             throw ConflictException("already_joined", "이미 가입된 스터디 그룹입니다.")
         }
 

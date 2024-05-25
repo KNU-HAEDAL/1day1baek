@@ -41,6 +41,12 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse)
     }
 
+    @ExceptionHandler(ConflictException::class)
+    fun handleConflictException(e: ConflictException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ConflictResponse(e.code, e.message!!)
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse)
+    }
 
     @ExceptionHandler(InvalidReqParamException::class)
     fun handleInvalidReqParamException(e: InvalidReqParamException): ResponseEntity<ErrorResponse> {

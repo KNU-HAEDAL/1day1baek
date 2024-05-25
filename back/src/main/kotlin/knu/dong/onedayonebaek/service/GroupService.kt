@@ -3,6 +3,7 @@ package knu.dong.onedayonebaek.service
 import knu.dong.onedayonebaek.domain.ContainGroup
 import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.*
+import knu.dong.onedayonebaek.exception.ConflictException
 import knu.dong.onedayonebaek.exception.ForbiddenException
 import knu.dong.onedayonebaek.exception.NotFoundException
 import knu.dong.onedayonebaek.repository.ContainGroupRepository
@@ -59,6 +60,35 @@ class GroupService (
         createdGroup.users.add(createdCG)
 
         return group.toGroupDetailDto()
+    }
+
+    @Transactional
+    fun joinGroup(user: User, groupId: Long, password: String?): GroupDetailDto {
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+
+        if (group.users.any{ it.user.id == user.id }) {
+            throw ConflictException("이미 가입된 스터디 그룹입니다.")
+        }
+
+        if (!group.isPrivate) {
+            containGroupRepository.save(ContainGroup(user, group))
+
+            return group.toGroupDetailDto()
+        }
+
+        if (password == null) {
+            throw ConflictException("비밀번호가 다릅니다.")
+        }
+
+        val isCorrectPW = passwordEncoder.matches(password, group.password)
+
+        if (isCorrectPW) {
+            containGroupRepository.save(ContainGroup(user, group))
+
+            return group.toGroupDetailDto()
+        }
+
+        throw ConflictException("비밀번호가 다릅니다.")
     }
 
     private fun getRandomInviteCode(length: Int): String {

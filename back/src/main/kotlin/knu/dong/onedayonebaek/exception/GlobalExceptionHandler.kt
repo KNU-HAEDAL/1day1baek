@@ -1,10 +1,7 @@
 package knu.dong.onedayonebaek.exception
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import knu.dong.onedayonebaek.exception.response.BadRequestResponse
-import knu.dong.onedayonebaek.exception.response.BaseErrorResponse
-import knu.dong.onedayonebaek.exception.response.ErrorResponse
-import knu.dong.onedayonebaek.exception.response.RefreshTokenExpiredResponse
+import knu.dong.onedayonebaek.exception.response.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -30,9 +27,23 @@ class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
     }
+    @ExceptionHandler(NotFoundException::class)
+    fun handleNotFoundException(e: NotFoundException): ResponseEntity<ErrorResponse> {
+        val errorResponse = NotFoundResponse("not_found", e.message!!)
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
+    }
+
+    @ExceptionHandler(ForbiddenException::class)
+    fun handleForbiddenException(e: ForbiddenException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ForbiddenResponse("forbidden", e.message!!)
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse)
+    }
+
 
     @ExceptionHandler(InvalidReqParamException::class)
-    fun handleValidationException(e: InvalidReqParamException): ResponseEntity<ErrorResponse> {
+    fun handleInvalidReqParamException(e: InvalidReqParamException): ResponseEntity<ErrorResponse> {
         val errorResponse = BadRequestResponse("bad_request", e.message!!)
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)

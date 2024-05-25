@@ -14,10 +14,13 @@ class Group (
     val isPrivate: Boolean = false,
 
     @Column
-    val inviteCode: String?,
+    val password: String?,
+
+    @Column(nullable = false)
+    val inviteCode: String,
 
     @OneToMany(mappedBy = "group")
-    val users: List<ContainGroup> = ArrayList(),
+    val users: MutableSet<ContainGroup> = mutableSetOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

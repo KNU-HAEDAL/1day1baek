@@ -16,7 +16,7 @@ class User(
     val profileUrl: String = "",
 
     @OneToMany(mappedBy = "user")
-    val groups: List<ContainGroup> = ArrayList()
+    val groups: MutableSet<ContainGroup> = mutableSetOf()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

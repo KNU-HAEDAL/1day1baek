@@ -16,5 +16,5 @@ class GroupController(
         description = "공개된 모든 그룹을 조회한다."
     )
     @GetMapping
-    fun loginUserInfo() = groupService.getPublicGroups()
+    fun getPublicGroups() = groupService.getPublicGroups()
 }

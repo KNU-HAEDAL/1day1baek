@@ -19,10 +19,10 @@ class GroupService (
     private val containGroupRepository: ContainGroupRepository,
     private val passwordEncoder: PasswordEncoder
 ){
-    fun getPublicGroups(): List<GroupInfo> =
-        groupRepository.findAllByIsPrivate(false)
+    fun getGroups(): List<GetGroupsResponse> =
+        groupRepository.findAll()
             .stream()
-            .map { it.toGroupInfo() }
+            .map { it.toGetGroupsResponse() }
             .collect(Collectors.toList())
 
     @Transactional

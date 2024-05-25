@@ -3,7 +3,7 @@ package knu.dong.onedayonebaek.dto
 import io.swagger.v3.oas.annotations.media.Schema
 import knu.dong.onedayonebaek.domain.Group
 
-data class GroupInfo(
+data class GetGroupsResponse(
     @Schema(description = "그룹 ID", nullable = false, example = "1")
     val id: Long,
 
@@ -17,4 +17,4 @@ data class GroupInfo(
     val inviteCode: String? = null
 )
 
-fun Group.toGroupInfo() = GroupInfo(id!!, name, isPrivate, inviteCode)
+fun Group.toGetGroupsResponse() = GetGroupsResponse(id!!, name, isPrivate, inviteCode)

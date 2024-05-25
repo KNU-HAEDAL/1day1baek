@@ -1,11 +1,15 @@
 package knu.dong.onedayonebaek.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.NotBlank
 import knu.dong.onedayonebaek.domain.Group
 import knu.dong.onedayonebaek.domain.User
 
 @Schema(description = "그룹 생성 요청 DTO")
 data class CreateGroupRequest(
+    @field:NotBlank
+    @field:Max(100)
     @Schema(description = "그룹 이름", required = true, example = "해달 짱")
     val name: String,
 

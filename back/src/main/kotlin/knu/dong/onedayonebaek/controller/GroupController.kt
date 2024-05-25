@@ -13,6 +13,7 @@ import knu.dong.onedayonebaek.exception.response.ForbiddenResponse
 import knu.dong.onedayonebaek.exception.response.NotFoundResponse
 import knu.dong.onedayonebaek.service.GroupService
 import org.springframework.security.core.Authentication
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 
@@ -56,8 +57,15 @@ class GroupController(
         description = "새로운 그룹을 만든다."
     )
     @PostMapping
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "스터디 그룹 상세 정보"),
+        ApiResponse(
+            responseCode = "400", description = "잘못된 Request Parameter",
+            content = [Content(schema = Schema(implementation = InvalidReqParamException::class))],
+        )
+    )
     fun createGroup(
-        @RequestBody requestDto: CreateGroupRequest,
+        @Validated @RequestBody requestDto: CreateGroupRequest,
         authentication: Authentication
     ): GroupDetailDto {
         val user = authentication.principal as User

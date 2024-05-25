@@ -1,6 +1,7 @@
 package knu.dong.onedayonebaek.controller
 
-import knu.dong.onedayonebaek.dto.UserDto
+import knu.dong.onedayonebaek.domain.User
+import knu.dong.onedayonebaek.dto.toUserDto
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,5 +12,5 @@ import org.springframework.web.bind.annotation.RestController
 class UserController {
 
     @GetMapping
-    fun loginUserInfo(authentication: Authentication) = authentication.principal as UserDto
+    fun loginUserInfo(authentication: Authentication) = (authentication.principal as User).toUserDto()
 }

@@ -31,6 +31,13 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
     }
 
+    @ExceptionHandler(InvalidReqParamException::class)
+    fun handleValidationException(e: InvalidReqParamException): ResponseEntity<ErrorResponse> {
+        val errorResponse = BadRequestResponse("bad_request", e.message!!)
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
         val fieldErrors = e.bindingResult.fieldErrors

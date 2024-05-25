@@ -13,7 +13,6 @@ import knu.dong.onedayonebaek.dto.GroupDetailDto
 import knu.dong.onedayonebaek.dto.JoinGroupRequest
 import knu.dong.onedayonebaek.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.exception.response.BadRequestResponse
-import knu.dong.onedayonebaek.exception.response.ConflictResponse
 import knu.dong.onedayonebaek.exception.response.ForbiddenResponse
 import knu.dong.onedayonebaek.exception.response.NotFoundResponse
 import knu.dong.onedayonebaek.service.GroupService
@@ -96,7 +95,7 @@ class GroupController(
             content = [Content(schema = Schema(implementation = BadRequestResponse::class))]),
         ApiResponse(responseCode = "404", description = "존재하지 않는 스터디 그룹",
             content = [Content(schema = Schema(implementation = NotFoundResponse::class))]),
-        ApiResponse(responseCode = "409", description = "비밀 스터디 그룹 비밀번호 불일치",
+        ApiResponse(responseCode = "409", description = "- 비밀번호 불일치\n- 해당 스터디 그룹에 이미 속해있음",
             content = [Content(
                 examples = [
                     ExampleObject(
@@ -128,8 +127,18 @@ class GroupController(
         ApiResponse(responseCode = "200", description = "스터디 그룹 상세 정보"),
         ApiResponse(responseCode = "404", description = "존재하지 않는 스터디 그룹",
             content = [Content(schema = Schema(implementation = NotFoundResponse::class))]),
-        ApiResponse(responseCode = "409", description = "로그인된 사용자가 그룹장인 경우",
-            content = [Content(schema = Schema(implementation = ConflictResponse::class))]),
+        ApiResponse(responseCode = "409", description = "- 사용자가 그룹 장임\n- 해당 스터디 그룹에 속해있지 않음",
+            content = [Content(
+                examples = [
+                    ExampleObject(
+                        name = "비밀 그룹 비밀번호 불일치",
+                        value = "{\"code\": \"not_allowed_leave_group_owner\", \"message\":\"그룹 장은 나갈 수 없습니다.\"}"
+                    ),ExampleObject(
+                        name = "이미 가입된 그룹",
+                        value = "{\"code\": \"already_leaved\", \"message\":\"해당 스터디 그룹에 속해있지 않습니다.\"}"
+                    )
+                ],
+                mediaType = MediaType.APPLICATION_JSON_VALUE)])
     )
     fun leaveGroup(@PathVariable groupId: Long, authentication: Authentication) {
         val user = authentication.principal as User

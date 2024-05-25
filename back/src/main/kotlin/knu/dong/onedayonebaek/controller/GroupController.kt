@@ -3,7 +3,7 @@ package knu.dong.onedayonebaek.controller
 import io.swagger.v3.oas.annotations.Operation
 import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.CreateGroupRequest
-import knu.dong.onedayonebaek.dto.CreateGroupResponse
+import knu.dong.onedayonebaek.dto.GroupDetailDto
 import knu.dong.onedayonebaek.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.service.GroupService
 import org.springframework.security.core.Authentication
@@ -29,7 +29,7 @@ class GroupController(
     fun createGroup(
         @RequestBody requestDto: CreateGroupRequest,
         authentication: Authentication
-    ): CreateGroupResponse {
+    ): GroupDetailDto {
         val user = authentication.principal as User
 
         if (requestDto.isPrivate && requestDto.password?.isBlank() != false) {

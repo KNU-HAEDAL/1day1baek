@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import knu.dong.onedayonebaek.domain.Group
 
 @Schema(description = "그룹 생성 응답 DTO")
-data class CreateGroupResponse(
+data class GroupDetailDto(
     @Schema(description = "그룹 이름", required = true, example = "해달 짱")
     val name: String,
 
@@ -18,8 +18,8 @@ data class CreateGroupResponse(
     val owner: UserDto
 )
 
-fun Group.toCreateGroupResponse() =
-    CreateGroupResponse(
+fun Group.toGroupDetailDto() =
+    GroupDetailDto(
         name,
         isPrivate,
         inviteCode,

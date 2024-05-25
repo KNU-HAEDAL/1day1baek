@@ -19,14 +19,14 @@ class GroupService (
     private val containGroupRepository: ContainGroupRepository,
     private val passwordEncoder: PasswordEncoder
 ){
-    fun getGroups(): List<GetGroupsResponse> =
+    fun getGroups(): List<GroupOfListDto> =
         groupRepository.findAll()
             .stream()
-            .map { it.toGetGroupsResponse() }
+            .map { it.toGroupOfListDto() }
             .collect(Collectors.toList())
 
     @Transactional
-    fun createGroup(user: User, req: CreateGroupRequest): CreateGroupResponse {
+    fun createGroup(user: User, req: CreateGroupRequest): GroupDetailDto {
         if (req.password != null) {
             val encodedPW = passwordEncoder.encode(req.password)
             req.password = encodedPW
@@ -42,7 +42,7 @@ class GroupService (
 
         createdGroup.users.add(createdCG)
 
-        return group.toCreateGroupResponse()
+        return group.toGroupDetailDto()
     }
 
     private fun getRandomInviteCode(length: Int): String {

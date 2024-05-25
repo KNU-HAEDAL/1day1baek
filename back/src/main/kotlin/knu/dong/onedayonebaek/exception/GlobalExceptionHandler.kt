@@ -57,7 +57,7 @@ class GlobalExceptionHandler {
         val fieldName = fieldError.field
         val rejectedValue = fieldError.rejectedValue
 
-        val message = "$fieldName 필드의 입력 값 ${rejectedValue}는 유효하지 않습니다."
+        val message = "'$fieldName' 필드의 입력 값 '${rejectedValue}'는 유효하지 않습니다."
         val errorResponse = BadRequestResponse("bad_request", message)
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)

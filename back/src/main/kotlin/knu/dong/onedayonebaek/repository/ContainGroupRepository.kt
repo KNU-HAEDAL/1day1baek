@@ -9,4 +9,5 @@ import java.util.*
 interface ContainGroupRepository: JpaRepository<ContainGroup, Long> {
 
     fun findByGroupAndUser(group: Group, user: User): Optional<ContainGroup>
+    fun existsByGroupAndUser(group: Group, user: User): Boolean
 }

@@ -3,6 +3,8 @@ package knu.dong.onedayonebaek.service
 import knu.dong.onedayonebaek.domain.ContainGroup
 import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.*
+import knu.dong.onedayonebaek.exception.ForbiddenException
+import knu.dong.onedayonebaek.exception.NotFoundException
 import knu.dong.onedayonebaek.repository.ContainGroupRepository
 import knu.dong.onedayonebaek.repository.GroupRepository
 import knu.dong.onedayonebaek.repository.UserRepository
@@ -24,6 +26,20 @@ class GroupService (
             .stream()
             .map { it.toGroupOfListDto() }
             .collect(Collectors.toList())
+
+    fun getGroupDetail(user: User, groupId: Long): GroupDetailDto {
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+
+        if (!group.isPrivate) {
+            return group.toGroupDetailDto()
+        }
+
+        if (group.users.any { it.user.id == user.id }) {
+            return group.toGroupDetailDto()
+        }
+
+        throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+    }
 
     @Transactional
     fun createGroup(user: User, req: CreateGroupRequest): GroupDetailDto {

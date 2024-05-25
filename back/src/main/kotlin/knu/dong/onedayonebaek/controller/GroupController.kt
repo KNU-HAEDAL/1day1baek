@@ -11,6 +11,7 @@ import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.CreateGroupRequest
 import knu.dong.onedayonebaek.dto.GroupDetailDto
 import knu.dong.onedayonebaek.dto.JoinGroupRequest
+import knu.dong.onedayonebaek.dto.JoinGroupWithInviteCodeRequest
 import knu.dong.onedayonebaek.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.exception.response.BadRequestResponse
 import knu.dong.onedayonebaek.exception.response.ForbiddenResponse
@@ -116,6 +117,36 @@ class GroupController(
         val user = authentication.principal as User
 
         return groupService.joinGroup(user, groupId, requestDto.password)
+    }
+
+    @Operation(
+        summary = "스터디 그룹 참가(초대 코드 사용)",
+        description = "초대 코드를 사용하여 지정된 스터디 그룹을 참가한다."
+    )
+    @PostMapping("/invited")
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "참가한 스터디 그룹의 상세 정보"),
+        ApiResponse(responseCode = "400", description = "잘못된 Request Parameter",
+            content = [Content(schema = Schema(implementation = BadRequestResponse::class))]),
+        ApiResponse(responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class))]),
+        ApiResponse(responseCode = "409", description = "- 해당 스터디 그룹에 이미 속해있음",
+            content = [Content(
+                examples = [
+                    ExampleObject(
+                        name = "이미 가입된 그룹",
+                        value = "{\"code\": \"already_joined\", \"message\":\"이미 가입된 스터디 그룹입니다.\"}"
+                    )
+                ],
+                mediaType = MediaType.APPLICATION_JSON_VALUE)])
+    )
+    fun joinGroupWithInviteCode(
+        @Validated @RequestBody requestDto: JoinGroupWithInviteCodeRequest,
+        authentication: Authentication
+    ): GroupDetailDto {
+        val user = authentication.principal as User
+
+        return groupService.joinGroupWithInviteCode(user, requestDto.inviteCode)
     }
 
     @Operation(

@@ -95,6 +95,21 @@ class GroupService (
     }
 
     @Transactional
+    fun joinGroupWithInviteCode(user: User, inviteCode: String): GroupDetailDto {
+        val group = groupRepository
+            .findByInviteCode(inviteCode)
+            .orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+
+        if (containGroupRepository.existsByGroupAndUser(group, user)) {
+            throw ConflictException("already_joined", "이미 가입된 스터디 그룹입니다.")
+        }
+
+        containGroupRepository.save(ContainGroup(user, group))
+
+        return group.toGroupDetailDto()
+    }
+
+    @Transactional
     fun leaveGroup(user: User, groupId: Long) {
         val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
         if (group.owner.id == user.id) {

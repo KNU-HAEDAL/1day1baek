@@ -15,11 +15,11 @@ class GroupController(
   private val groupService: GroupService
 ) {
     @Operation(
-        summary = "공개된 그룹 목록 조회",
-        description = "공개된 모든 그룹을 조회한다."
+        summary = "그룹 목록 조회",
+        description = "모든 그룹을 조회한다."
     )
     @GetMapping
-    fun getPublicGroups() = groupService.getPublicGroups()
+    fun getGroups() = groupService.getGroups()
 
     @Operation(
         summary = "그룹 생성",

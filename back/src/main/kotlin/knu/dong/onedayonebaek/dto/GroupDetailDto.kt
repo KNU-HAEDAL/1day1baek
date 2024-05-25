@@ -5,6 +5,9 @@ import knu.dong.onedayonebaek.domain.Group
 
 @Schema(description = "그룹 생성 응답 DTO")
 data class GroupDetailDto(
+    @Schema(description = "그룹 ID", nullable = false, example = "1")
+    val id: Long,
+
     @Schema(description = "그룹 이름", required = true, example = "해달 짱")
     val name: String,
 
@@ -20,6 +23,7 @@ data class GroupDetailDto(
 
 fun Group.toGroupDetailDto() =
     GroupDetailDto(
+        id!!,
         name,
         isPrivate,
         inviteCode,

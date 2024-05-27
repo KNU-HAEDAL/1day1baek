@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import knu.dong.onedayonebaek.exception.RefreshTokenExpiredException
-import knu.dong.onedayonebaek.exception.response.RefreshTokenExpiredResponse
+import knu.dong.onedayonebaek.common.exception.RefreshTokenExpiredException
+import knu.dong.onedayonebaek.common.exception.response.RefreshTokenExpiredResponse
 import knu.dong.onedayonebaek.oauth.dto.Token
 import knu.dong.onedayonebaek.oauth.service.TokenService
 import org.springframework.web.bind.annotation.GetMapping

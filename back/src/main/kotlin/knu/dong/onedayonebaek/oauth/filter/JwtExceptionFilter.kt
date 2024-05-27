@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
+import knu.dong.onedayonebaek.common.exception.AccessTokenExpiredException
 import org.springframework.web.filter.OncePerRequestFilter
 
 

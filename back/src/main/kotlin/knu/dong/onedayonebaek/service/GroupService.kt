@@ -2,6 +2,7 @@ package knu.dong.onedayonebaek.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import knu.dong.onedayonebaek.domain.ContainGroup
+import knu.dong.onedayonebaek.domain.Problem
 import knu.dong.onedayonebaek.domain.User
 import knu.dong.onedayonebaek.dto.*
 import knu.dong.onedayonebaek.exception.ConflictException
@@ -9,10 +10,13 @@ import knu.dong.onedayonebaek.exception.ForbiddenException
 import knu.dong.onedayonebaek.exception.NotFoundException
 import knu.dong.onedayonebaek.repository.ContainGroupRepository
 import knu.dong.onedayonebaek.repository.GroupRepository
+import knu.dong.onedayonebaek.repository.ProblemRepository
 import knu.dong.onedayonebaek.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.stream.Collectors
 
 private val myLogger = KotlinLogging.logger {}
@@ -23,6 +27,7 @@ class GroupService (
     private val userRepository: UserRepository,
     private val groupRepository: GroupRepository,
     private val containGroupRepository: ContainGroupRepository,
+    private val problemRepository: ProblemRepository,
     private val passwordEncoder: PasswordEncoder
 ){
     fun getGroups(): List<GroupOfListDto> =
@@ -124,11 +129,60 @@ class GroupService (
         containGroupRepository.delete(containGroup)
     }
 
+    fun getProblems(user: User, groupId: Long, date: LocalDate): List<ProblemsOfUser> {
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        if (group.isPrivate && !containGroupRepository.existsByGroupAndUser(group, user)) {
+            throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+        }
+
+        val users = containGroupRepository.findAllByGroup(group).map { it.user }
+
+        val problems = problemRepository.findAllBySolvedDateAndUserIsIn(date, users)
+
+        return mapUserProblem(users, problems)
+    }
+
+    fun getProblems(user: User, groupId: Long, yearMonth: YearMonth): List<ProblemsOfUser> {
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        if (group.isPrivate && !containGroupRepository.existsByGroupAndUser(group, user)) {
+            throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+        }
+
+        val users = containGroupRepository.findAllByGroup(group).map { it.user }
+        val start = yearMonth.atDay(1)
+        val end = yearMonth.atEndOfMonth()
+
+        val problems = problemRepository.findAllBySolvedDateBetweenAndUserIsIn(start, end, users)
+
+        return mapUserProblem(users, problems)
+    }
+
+    fun getProblems(user: User, groupId: Long, startDate: LocalDate, endDate: LocalDate): List<ProblemsOfUser> {
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        if (group.isPrivate && !containGroupRepository.existsByGroupAndUser(group, user)) {
+            throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+        }
+
+        val users = containGroupRepository.findAllByGroup(group).map { it.user }
+        val problems = problemRepository.findAllBySolvedDateBetweenAndUserIsIn(startDate, endDate, users)
+
+        return mapUserProblem(users, problems)
+    }
+
     private fun getRandomInviteCode(length: Int): String {
         val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
         return (1..length)
             .map { charset.random() }
             .joinToString("")
+    }
+
+    private fun mapUserProblem(users: List<User>, problems: List<Problem>): List<ProblemsOfUser> {
+        val userMap = mutableMapOf<Long, ProblemsOfUser>()
+
+        users.forEach { userMap[it.id!!] = ProblemsOfUser(arrayListOf(), it.name, it.id) }
+        problems.forEach { userMap[it.user.id]?.problems?.add(it.toProblemDto()) }
+
+        return userMap.values.toList()
     }
 }

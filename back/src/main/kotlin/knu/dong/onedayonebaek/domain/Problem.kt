@@ -5,10 +5,10 @@ import java.time.LocalDate
 
 
 @Entity
-@Table(name = "commits")
-class Commit(
+@Table(name = "problems")
+class Problem(
     @Column(nullable = false)
-    var commitDate: LocalDate,
+    var solvedDate: LocalDate,
 
     @Column(nullable = false, unique = true)
     var commitUrl: String,
@@ -16,7 +16,7 @@ class Commit(
     var problemRank: String,
 
     @Column(nullable = false)
-    var problemTitle: String,
+    var title: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.domain.User
-import knu.dong.onedayonebaek.dto.CommitInfo
+import knu.dong.onedayonebaek.dto.ProblemDto
 import knu.dong.onedayonebaek.exception.response.BadRequestResponse
-import knu.dong.onedayonebaek.service.CommitService
+import knu.dong.onedayonebaek.service.ProblemService
 import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -18,8 +19,9 @@ import java.time.YearMonth
 
 @Validated
 @RestController
-@RequestMapping("/commits")
-class CommitController(private val commitService: CommitService) {
+@RequestMapping("/problems")
+@Tag(name = "해결한 문제 APIs", description = "해결한 문제들을 조회하는 APIs")
+class ProblemController(private val problemService: ProblemService) {
 
     @Operation(
         summary = "로그인된 유저가 해결한 문제 목록 조회",
@@ -33,9 +35,9 @@ class CommitController(private val commitService: CommitService) {
         )
     )
     @GetMapping
-    fun getCommits(
+    fun getProblems(
         @Schema(
-            description = "커밋 목록을 조회하고 싶은 년도와 월",
+            description = "해결한 문제 목록을 조회하고 싶은 년도와 월",
             required = true,
             example = "2024-05",
             type = "String",
@@ -43,10 +45,10 @@ class CommitController(private val commitService: CommitService) {
         )
         yearMonth: YearMonth,
         authentication: Authentication
-    ): List<CommitInfo> {
+    ): List<ProblemDto> {
         val user = authentication.principal as User
 
-        return commitService.getCommits(user, yearMonth)
+        return problemService.getProblems(user, yearMonth)
     }
 
     @Operation(
@@ -61,9 +63,9 @@ class CommitController(private val commitService: CommitService) {
         )
     )
     @GetMapping("/count")
-    fun getCommitCountOfDay(
+    fun getProblemCountOfDay(
         @Schema(
-            description = "커밋 개수를 조회하고 싶은 날짜",
+            description = "해결한 문제 개수를 조회하고 싶은 날짜",
             required = true,
             example = "2024-05-25"
         )
@@ -72,6 +74,6 @@ class CommitController(private val commitService: CommitService) {
     ): Int {
         val user = authentication.principal as User
 
-        return commitService.getCommits(user, date).size
+        return problemService.getProblems(user, date).size
     }
 }

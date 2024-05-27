@@ -4,9 +4,9 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
-import knu.dong.onedayonebaek.exception.AccessTokenExpiredException
+import knu.dong.onedayonebaek.common.exception.AccessTokenExpiredException
 import knu.dong.onedayonebaek.oauth.service.TokenService
-import knu.dong.onedayonebaek.repository.UserRepository
+import knu.dong.onedayonebaek.user.repository.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder

@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.domain.User
+import knu.dong.onedayonebaek.dto.DateUnit
 import knu.dong.onedayonebaek.dto.ProblemDto
+import knu.dong.onedayonebaek.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.exception.response.BadRequestResponse
 import knu.dong.onedayonebaek.service.ProblemService
 import org.springframework.security.core.Authentication
@@ -36,19 +38,45 @@ class ProblemController(private val problemService: ProblemService) {
     )
     @GetMapping
     fun getProblems(
-        @Schema(
-            description = "해결한 문제 목록을 조회하고 싶은 년도와 월",
-            required = true,
-            example = "2024-05",
+        @Schema(description = "조회 단위", required = true, implementation = DateUnit::class)
+        type: DateUnit,
+
+        @Schema(description = "type=day - 특정 일의 해결한 문제 목록을 조회", example = "2024-05-28")
+        date: LocalDate?,
+
+        @Schema(description = "type=month - 특정 달의 해결한 문제 목록을 조회", example = "2024-05",
             type = "String",
-            format = "YYYY-MM"
-        )
-        yearMonth: YearMonth,
+            format = "YYYY-MM")
+        yearMonth: YearMonth?,
+
+        @Schema(description = "type=range - 특정 범위의 날짜 동안 해결한 문제 목록을 조회(시작 날짜)", example = "2024-05-28")
+        startDate: LocalDate?,
+
+        @Schema(description = "type=range - 특정 범위의 날짜 동안 해결한 문제 목록을 조회(종료 날짜)", example = "2024-05-30")
+        endDate: LocalDate?,
+
         authentication: Authentication
     ): List<ProblemDto> {
         val user = authentication.principal as User
 
-        return problemService.getProblems(user, yearMonth)
+        return when (type) {
+            DateUnit.DAY -> {
+                problemService.getProblems(user,
+                    date ?: throw InvalidReqParamException("date 필드가 비어있습니다.")
+                )
+            }
+            DateUnit.MONTH -> {
+                problemService.getProblems(user,
+                    yearMonth ?: throw InvalidReqParamException("yearMonth 필드가 비어있습니다.")
+                )
+            }
+            else -> {
+                problemService.getProblems(user,
+                    startDate ?: throw InvalidReqParamException("startDate 필드가 비어있습니다."),
+                    endDate ?: throw InvalidReqParamException("endDate 필드가 비어있습니다.")
+                )
+            }
+        }
     }
 
     @Operation(

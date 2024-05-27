@@ -37,4 +37,12 @@ class ProblemService(
             .map { it.toProblemDto() }
             .collect(Collectors.toList())
     }
+
+    fun getProblems(user: User, startDate: LocalDate, endDate: LocalDate): List<ProblemDto> {
+        return problemRepository
+            .findAllBySolvedDateBetweenAndUser(startDate, endDate, user)
+            .stream()
+            .map { it.toProblemDto() }
+            .collect(Collectors.toList())
+    }
 }

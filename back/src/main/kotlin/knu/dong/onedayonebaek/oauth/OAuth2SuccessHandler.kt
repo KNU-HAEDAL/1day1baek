@@ -4,9 +4,9 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import knu.dong.onedayonebaek.user.dto.UserDto
-import knu.dong.onedayonebaek.group.dto.toEntity
 import knu.dong.onedayonebaek.oauth.dto.Token
 import knu.dong.onedayonebaek.oauth.service.TokenService
+import knu.dong.onedayonebaek.user.dto.toEntity
 import knu.dong.onedayonebaek.user.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication

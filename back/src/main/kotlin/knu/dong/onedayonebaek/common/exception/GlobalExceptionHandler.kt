@@ -2,7 +2,6 @@ package knu.dong.onedayonebaek.common.exception
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import knu.dong.onedayonebaek.common.exception.response.*
-import knu.dong.onedayonebaek.exception.response.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException

@@ -39,11 +39,7 @@ class GroupService (
     fun getGroupDetail(user: User, groupId: Long): GroupDetailDto {
         val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
 
-        if (!group.isPrivate) {
-            return group.toGroupDetailDto()
-        }
-
-        if (group.users.any { it.user.id == user.id }) {
+        if (!group.isPrivate || containGroupRepository.existsByGroupAndUser(group, user)) {
             return group.toGroupDetailDto()
         }
 

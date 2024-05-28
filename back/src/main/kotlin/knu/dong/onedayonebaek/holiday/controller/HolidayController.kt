@@ -146,24 +146,16 @@ class HolidayController(private val holidayService: HolidayService) {
             content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
         )
     )
-    fun addHolidaysBetween(
+    fun addHolidaysUsingRange(
         @PathVariable groupId: Long,
-        @RequestBody request: AddHolidaysBetweenRequest,
+        @RequestBody requestDto: HolidaysBetweenRequest,
         authentication: Authentication
     ) {
         val user = authentication.principal as User
-        val start: LocalDate = request.startDate
-        val end: LocalDate = request.endDate
 
-        val dates: MutableList<LocalDate> = ArrayList()
+        val holidays = calculateLocalDateOf(requestDto.startDate, requestDto.endDate)
 
-        var date = start
-        while (!date.isAfter(end)) {
-            dates.add(date)
-            date = date.plusDays(1)
-        }
-
-        holidayService.addHolidays(groupId, user, dates)
+        holidayService.addHolidays(groupId, user, holidays)
     }
 
     @Operation(
@@ -220,6 +212,34 @@ class HolidayController(private val holidayService: HolidayService) {
         holidayService.removeHolidays(groupId, user, holidays)
     }
 
+    @Operation(
+        summary = "휴일을 범위로 제거 API",
+        description = "특정 범위를 모두 휴일에서 제거한다."
+    )
+    @DeleteMapping("/range")
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "삭제 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
+    )
+    fun removeHolidaysUsingRange(
+        @PathVariable groupId: Long,
+        @RequestBody requestDto: HolidaysBetweenRequest,
+        authentication: Authentication
+    ) {
+        val user = authentication.principal as User
+
+        val holidays = calculateLocalDateOf(requestDto.startDate, requestDto.endDate)
+
+        holidayService.removeHolidays(groupId, user, holidays)
+    }
+
     private fun calculateLocalDatesOf(dayOfWeeks: List<DayOfWeek>): List<LocalDate> {
         val valueDayOfWeeks = dayOfWeeks.map { it.value }
 
@@ -235,6 +255,18 @@ class HolidayController(private val holidayService: HolidayService) {
                 localDates.add(date)
             }
 
+            date = date.plusDays(1)
+        }
+
+        return localDates
+    }
+
+    private fun calculateLocalDateOf(startDate: LocalDate, endDate: LocalDate) : List<LocalDate> {
+        val localDates: MutableList<LocalDate> = ArrayList()
+
+        var date = startDate
+        while (!date.isAfter(endDate)) {
+            localDates.add(date)
             date = date.plusDays(1)
         }
 

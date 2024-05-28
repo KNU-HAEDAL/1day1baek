@@ -216,7 +216,7 @@ class GroupController(
         ApiResponse(
             responseCode = "404", description = "존재하지 않는 스터디 그룹",
             content = [Content(
-                schema = Schema(implementation = ForbiddenResponse::class),
+                schema = Schema(implementation = NotFoundResponse::class),
                 examples = [
                     ExampleObject(
                         name = "내보내려는 사용자가 없음",

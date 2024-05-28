@@ -29,14 +29,14 @@ class GlobalExceptionHandler {
     }
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFoundException(e: NotFoundException): ResponseEntity<ErrorResponse> {
-        val errorResponse = NotFoundResponse("not_found", e.message!!)
+        val errorResponse = NotFoundResponse(e.code, e.message!!)
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
     }
 
     @ExceptionHandler(ForbiddenException::class)
     fun handleForbiddenException(e: ForbiddenException): ResponseEntity<ErrorResponse> {
-        val errorResponse = ForbiddenResponse("forbidden", e.message!!)
+        val errorResponse = ForbiddenResponse(e.code, e.message!!)
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse)
     }

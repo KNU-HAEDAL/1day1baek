@@ -15,4 +15,6 @@ interface ProblemRepository: JpaRepository<Problem, Long> {
     @EntityGraph(attributePaths = ["user"])
     fun findAllBySolvedDateAndUserIsIn(date: LocalDate, users: List<User>): List<Problem>
 
+    fun existsByCommitUrl(commitUrl: String): Boolean
+
 }

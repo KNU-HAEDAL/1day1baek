@@ -3,7 +3,7 @@ package knu.dong.onedayonebaek.holiday.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.holiday.dto.AddHolidaysBetweenRequest
-import knu.dong.onedayonebaek.holiday.dto.AddHolidaysRequest
+import knu.dong.onedayonebaek.holiday.dto.HolidaysRequest
 import knu.dong.onedayonebaek.holiday.service.HolidayService
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -19,7 +19,7 @@ class HolidayController(private val holidayService: HolidayService) {
         description = "휴일들을 추가한다. (권한 추가를 안해서 사용하지 마십숑)"
     )
     @PostMapping
-    fun addHolidays(@RequestBody request: AddHolidaysRequest) {
+    fun addHolidays(@RequestBody request: HolidaysRequest) {
         holidayService.addHolidays(request.holidays)
     }
 
@@ -42,5 +42,15 @@ class HolidayController(private val holidayService: HolidayService) {
         }
 
         holidayService.addHolidays(dates)
+    }
+
+    @Operation(
+        hidden = true,
+        summary = "휴일 삭제 API",
+        description = "휴일을 제거한다. (권한 추가를 안해서 사용하지 마십숑)"
+    )
+    @DeleteMapping
+    fun removeHolidays(@RequestBody request: HolidaysRequest) {
+        holidayService.removeHolidays(request.holidays)
     }
 }

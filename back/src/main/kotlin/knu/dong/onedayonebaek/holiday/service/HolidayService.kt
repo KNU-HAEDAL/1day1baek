@@ -20,4 +20,9 @@ class HolidayService(private val holidayRepository: HolidayRepository) {
 
         holidayRepository.saveAll(holidays)
     }
+
+    @Transactional
+    fun removeHolidays(dates: List<LocalDate>) {
+        holidayRepository.deleteByDateIn(dates)
+    }
 }

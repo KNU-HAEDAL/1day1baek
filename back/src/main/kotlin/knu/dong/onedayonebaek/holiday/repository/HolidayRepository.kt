@@ -7,5 +7,5 @@ import java.time.LocalDate
 interface HolidayRepository: JpaRepository<Holiday, Long> {
 
     fun existsByDate(date: LocalDate): Boolean
-
+    fun deleteByDateIn(date: List<LocalDate>)
 }

@@ -7,4 +7,5 @@ import java.util.*
 interface GroupRepository: JpaRepository<Group, Long> {
 
     fun findByInviteCode(inviteCode: String): Optional<Group>
+
 }

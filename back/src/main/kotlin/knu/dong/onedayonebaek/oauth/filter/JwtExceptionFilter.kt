@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import knu.dong.onedayonebaek.common.exception.AccessTokenExpiredException
+import knu.dong.onedayonebaek.common.exception.response.BaseErrorResponse
 import org.springframework.web.filter.OncePerRequestFilter
 
 
@@ -19,13 +20,11 @@ class JwtExceptionFilter : OncePerRequestFilter() {
         } catch (e: AccessTokenExpiredException) {
             val objectMapper = ObjectMapper()
 
-            val map: MutableMap<String, String> = HashMap()
-            map["code"] = "access_token_expired"
-            map["message"] = "Access token expired"
+            val error = BaseErrorResponse(e.code, e.message!!)
 
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.contentType = "application/json;charset=UTF-8"
-            response.writer.write(objectMapper.writeValueAsString(map))
+            response.writer.write(objectMapper.writeValueAsString(error))
         }
     }
 }

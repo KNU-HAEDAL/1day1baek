@@ -5,6 +5,7 @@ import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import knu.dong.onedayonebaek.common.exception.AccessTokenExpiredException
+import knu.dong.onedayonebaek.common.exception.NotFoundException
 import knu.dong.onedayonebaek.oauth.service.TokenService
 import knu.dong.onedayonebaek.user.repository.UserRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -43,7 +44,7 @@ class JwtAuthFilter(
             if (accessToken != null && tokenService.verifyToken(accessToken)) {
                 val loginId = tokenService.getUid(accessToken)
 
-                val user = userRepository.findByLoginId(loginId)
+                val user = userRepository.findByLoginId(loginId).orElseThrow { NotFoundException() }
 
                 SecurityContextHolder.getContext().authentication =
                     UsernamePasswordAuthenticationToken(

@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const LoginRedirectPage = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const accessToken = searchParams.get('access');
@@ -14,7 +17,10 @@ const LoginRedirectPage = () => {
     if (refreshToken) {
       localStorage.setItem('rId', refreshToken);
     }
-  }, [searchParams]);
+
+    navigate('/');
+    toast.success('환영합니다! 김규회님!');
+  }, [searchParams, navigate]);
 
   return <></>;
 };

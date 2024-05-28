@@ -14,7 +14,12 @@ module.exports = {
   settings: {
     react: { version: '18.2' },
   },
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
+  ignorePatterns: [
+    'dist',
+    '.eslintrc.cjs',
+    'vite.config.ts',
+    'public/mockServiceWorker.js',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: true,

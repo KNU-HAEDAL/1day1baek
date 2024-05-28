@@ -1,5 +1,6 @@
 package knu.dong.onedayonebaek.github.controller
 
+import io.swagger.v3.oas.annotations.Hidden
 import knu.dong.onedayonebaek.common.exception.NotFoundException
 import knu.dong.onedayonebaek.github.dto.CommitWebhookRequest
 import knu.dong.onedayonebaek.problem.service.ProblemService
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/github/webhook")
+@Hidden
 class GithubWebhookController(
     private val userService: UserService,
     private val problemService: ProblemService

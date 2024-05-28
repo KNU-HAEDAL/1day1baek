@@ -15,6 +15,9 @@ spring:
 springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter : method
+    tags-sorter: alpha
 server:
   port: 8080
 

@@ -49,20 +49,6 @@ class HolidayService(
         holidayRepository.deleteByGroupAndDateIn(group, dates)
     }
 
-//    @Transactional
-//    fun sync(start: LocalDate, end: LocalDate) {
-//        var date = start
-//        while (!date.isAfter(end)) {
-//            val dayOfWeek = date.dayOfWeek
-//            if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-//                if (!holidayRepository.existsByDate(date)) {
-//                    holidayRepository.save(Holiday(date = date))
-//                }
-//            }
-//            date = date.plusDays(1)
-//        }
-//    }
-
     fun getHolidaysBetweenDate(groupId: Long, user: User, start: LocalDate, end: LocalDate): List<LocalDate> {
         val group = groupRepository.findById(groupId)
             .orElseThrow { NotFoundException(code = "not_found_group", message = "존재하지 않는 그룹입니다.") }

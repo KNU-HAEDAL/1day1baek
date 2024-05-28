@@ -13,3 +13,10 @@ export const DisplayLayout = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const LoginLayout = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 45px);
+`;

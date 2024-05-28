@@ -1,13 +1,9 @@
 import { ButtonWrapper } from '@components/button/ButtonWrapper';
 import { DefaultButton } from '@components/button/DefaultButton';
 
-import styled from '@emotion/styled';
+import { IProblem } from '@interfaces/ProblemInterface';
 
-interface IProblem {
-  date: string;
-  problem: string;
-  difficulty: string;
-}
+import styled from '@emotion/styled';
 
 const ProblemContainer = styled.div`
   background: linear-gradient(
@@ -101,15 +97,15 @@ const ProblemList = ({
         </thead>
         <tbody>
           {problems
-            .filter((problem) => problem.date === formattedDate)
+            .filter((problem) => problem.solvedDate === formattedDate)
             .map((problem, index) => (
               <tr key={index}>
-                <td>{problem.problem}</td>
-                <td>{problem.difficulty}</td>
+                <td>{problem.title}</td>
+                <td>{problem.rank}</td>
                 <td>
                   <ButtonWrapper display='flex' justifyContent='center'>
                     <ProblemButton
-                      onClick={() => alert('click')}
+                      onClick={() => window.open(problem.commitUrl)}
                       color='white'
                       backgroundColor='blue'
                     >

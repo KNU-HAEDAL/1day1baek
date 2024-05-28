@@ -48,8 +48,11 @@ class GroupService (
     }
 
     @Transactional
-    fun createGroup(user: User, req: CreateGroupRequest): GroupDetailDto {
-        if (req.password != null) {
+    fun createGroup(user: User, req: CreateOrUpdateGroupRequest): GroupDetailDto {
+        if (!req.isPrivate) {
+            req.password = null
+        }
+        else if (req.password != null) {
             val encodedPW = passwordEncoder.encode(req.password)
             req.password = encodedPW
         }
@@ -65,6 +68,29 @@ class GroupService (
         createdGroup.users.add(createdCG)
 
         return group.toGroupDetailDto()
+    }
+
+    @Transactional
+    fun updateGroup(user: User, groupId: Long, updateReq: CreateOrUpdateGroupRequest): GroupDetailDto {
+        val existingGroup = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
+
+        if (existingGroup.owner.id != user.id) {
+            throw ForbiddenException(message = "그룹 장만 수정할 수 있습니다.")
+        }
+
+        if (updateReq.password != null) {
+            val encodedPW = passwordEncoder.encode(updateReq.password)
+            updateReq.password = encodedPW
+        }
+
+        existingGroup.isPrivate = updateReq.isPrivate
+        existingGroup.name = updateReq.name
+        existingGroup.password = if (updateReq.isPrivate) updateReq.password else null
+        existingGroup.goalSolveCount = updateReq.goalSolveCount
+
+        val updatedGroup = groupRepository.save(existingGroup)
+
+        return updatedGroup.toGroupDetailDto()
     }
 
     @Transactional

@@ -13,16 +13,16 @@ class Group (
 
     @ColumnDefault("false")
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    val isPrivate: Boolean = false,
+    var isPrivate: Boolean = false,
 
     @Column
-    val password: String?,
+    var password: String?,
 
     @Column(nullable = false)
     val inviteCode: String,
 
     @Column(nullable = false)
-    val goalSolveCount: Int = 1,
+    var goalSolveCount: Int = 1,
 
     @OneToMany(mappedBy = "group")
     val users: MutableSet<ContainGroup> = mutableSetOf(),

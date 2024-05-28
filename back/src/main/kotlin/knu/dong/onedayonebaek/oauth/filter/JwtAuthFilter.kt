@@ -1,5 +1,6 @@
 package knu.dong.onedayonebaek.oauth.filter
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
@@ -24,7 +25,8 @@ class JwtAuthFilter(
         "/swagger-ui",
         "/swagger-resources",
         "/v3/api-docs",
-        "/token"
+        "/token",
+        "/github/webhook"
     )
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {

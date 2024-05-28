@@ -33,7 +33,8 @@ class SecurityConfig(
         "/swagger-ui/**",
         "/swagger-resources/**",
         "/v3/api-docs/**",
-        "/token/**"
+        "/token/**",
+        "/github/webhook/**"
     )
 
 

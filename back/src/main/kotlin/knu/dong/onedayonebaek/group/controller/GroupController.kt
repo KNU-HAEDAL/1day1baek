@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.common.dto.DateUnit
 import knu.dong.onedayonebaek.common.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.common.exception.response.BadRequestResponse
@@ -31,6 +32,7 @@ private val myLogger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/groups")
+@Tag(name = "Group APIs", description = "그룹과 관련된 APIs")
 class GroupController(
   private val groupService: GroupService
 ) {

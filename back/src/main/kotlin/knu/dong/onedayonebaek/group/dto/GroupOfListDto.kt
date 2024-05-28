@@ -11,10 +11,7 @@ data class GroupOfListDto(
     val name: String,
 
     @Schema(description = "비밀 그룹 여부", nullable = false, example = "false")
-    val isPrivate: Boolean,
-
-    @Schema(description = "입장 코드", example = "b3dad41qSd3rYT1")
-    val inviteCode: String? = null
+    val isPrivate: Boolean
 )
 
-fun Group.toGroupOfListDto() = GroupOfListDto(id!!, name, isPrivate, inviteCode)
+fun Group.toGroupOfListDto() = GroupOfListDto(id!!, name, isPrivate)

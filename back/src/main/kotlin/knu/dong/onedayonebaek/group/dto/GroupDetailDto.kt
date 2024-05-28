@@ -22,6 +22,9 @@ data class GroupDetailDto(
     @Schema(description = "하루에 풀어야하는 문제 개수", nullable = false, example = "1")
     val goalSolveCount: Int,
 
+    @Schema(description = "문제를 풀지 않은 날 매겨지는 벌금", nullable = false, example = "1000")
+    val fine: Int,
+
     @Schema(description = "그룹에 속한 유저", nullable = false)
     val users: List<UserDto>,
 
@@ -36,6 +39,7 @@ fun Group.toGroupDetailDto() =
         isPrivate,
         inviteCode,
         goalSolveCount,
+        fine,
         users.map { it.user.toUserDto() },
         owner.toUserDto()
     )

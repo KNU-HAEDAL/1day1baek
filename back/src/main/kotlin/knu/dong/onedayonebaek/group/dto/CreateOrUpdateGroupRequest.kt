@@ -24,8 +24,14 @@ data class CreateOrUpdateGroupRequest(
     @field:Min(1)
     @field:Max(10000)
     @Schema(description = "하루에 풀어야하는 문제 개수", required = false, example = "1", defaultValue = "1")
-    val goalSolveCount: Int = 1
+    val goalSolveCount: Int = 1,
+
+    @field:Min(0)
+    @field:Max(1000000)
+    @Schema(description = "문제를 풀지 않은 날 매겨지는 벌금", required = false, example = "1000", defaultValue = "0")
+    val fine: Int = 0
 )
 
 fun CreateOrUpdateGroupRequest.toEntity(inviteCode: String, owner: User) =
-    Group(name = name, isPrivate = isPrivate, password = password, inviteCode = inviteCode, owner = owner, goalSolveCount = goalSolveCount)
+    Group(name = name, isPrivate = isPrivate, password = password,
+        inviteCode = inviteCode, owner = owner, goalSolveCount = goalSolveCount, fine = fine)

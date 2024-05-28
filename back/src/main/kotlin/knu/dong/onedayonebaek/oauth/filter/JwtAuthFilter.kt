@@ -40,20 +40,18 @@ class JwtAuthFilter(
                 }
             }
 
-            if (accessToken != null) {
-                if (tokenService.verifyToken(accessToken)) {
-                    val loginId = tokenService.getUid(accessToken)
+            if (accessToken != null && tokenService.verifyToken(accessToken)) {
+                val loginId = tokenService.getUid(accessToken)
 
-                    val user = userRepository.findByLoginId(loginId)
+                val user = userRepository.findByLoginId(loginId)
 
-                    SecurityContextHolder.getContext().authentication =
-                        UsernamePasswordAuthenticationToken(
-                            user, "", listOf(SimpleGrantedAuthority("ROLE_USER"))
-                        )
-                }
-                else {
-                    throw AccessTokenExpiredException()
-                }
+                SecurityContextHolder.getContext().authentication =
+                    UsernamePasswordAuthenticationToken(
+                        user, "", listOf(SimpleGrantedAuthority("ROLE_USER"))
+                    )
+            }
+            else {
+                throw AccessTokenExpiredException()
             }
         }
 

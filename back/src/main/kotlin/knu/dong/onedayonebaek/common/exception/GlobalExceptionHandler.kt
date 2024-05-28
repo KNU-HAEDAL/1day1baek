@@ -16,7 +16,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessTokenExpiredException::class)
     fun handleAccessTokenExpiredException(e: AccessTokenExpiredException): ResponseEntity<ErrorResponse> {
-        val errorResponse = BaseErrorResponse("access_token_expired", e.message!!)
+        val errorResponse = UnauthorizedResponse(e.code, e.message!!)
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
     }

@@ -21,8 +21,13 @@ class Group (
     @Column(nullable = false)
     val inviteCode: String,
 
+    @ColumnDefault("1")
     @Column(nullable = false)
     var goalSolveCount: Int = 1,
+
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    var fine: Int = 0,
 
     @OneToMany(mappedBy = "group")
     val users: MutableSet<ContainGroup> = mutableSetOf(),

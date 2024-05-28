@@ -87,6 +87,7 @@ class GroupService (
         existingGroup.name = updateReq.name
         existingGroup.password = if (updateReq.isPrivate) updateReq.password else null
         existingGroup.goalSolveCount = updateReq.goalSolveCount
+        existingGroup.fine = updateReq.fine
 
         val updatedGroup = groupRepository.save(existingGroup)
 

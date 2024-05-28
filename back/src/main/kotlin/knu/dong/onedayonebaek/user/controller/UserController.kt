@@ -43,7 +43,10 @@ class UserController(
     @GetMapping
     fun loginUserInfo(authentication: Authentication) = (authentication.principal as User).toUserDto()
 
-
+    @Operation(
+        summary = "내가 속한 그룹 목록 조회",
+        description = "로그인된 유저가 속한 그룹 목록을 조회한다."
+    )
     @GetMapping("/my/groups")
     fun getMyGroups(authentication: Authentication): List<GroupOfListDto> {
         val user = authentication.principal as User

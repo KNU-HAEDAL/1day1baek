@@ -1,31 +1,48 @@
 package knu.dong.onedayonebaek.holiday.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.common.exception.InvalidReqParamException
+import knu.dong.onedayonebaek.common.exception.response.ForbiddenResponse
+import knu.dong.onedayonebaek.common.exception.response.NotFoundResponse
 import knu.dong.onedayonebaek.holiday.dto.AddHolidaysBetweenRequest
 import knu.dong.onedayonebaek.holiday.dto.DateUnitForHoliday
 import knu.dong.onedayonebaek.holiday.dto.HolidaysRequest
 import knu.dong.onedayonebaek.holiday.service.HolidayService
+import knu.dong.onedayonebaek.user.domain.User
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.YearMonth
 
 @RestController
-@RequestMapping("/holidays")
-@Tag(name = "Holiday APIs", description = "휴일과 관련된 APIs")
+@RequestMapping("groups/{groupId}/holidays")
+@Tag(name = "Holiday APIs", description = "그룹 휴일과 관련된 APIs")
 class HolidayController(private val holidayService: HolidayService) {
 
     @Operation(
         summary = "휴일 조회 API",
         description = "특정 범위의 요일에 해당되는 휴일들을 조회한다."
     )
-    @ApiResponses(ApiResponse(responseCode = "200", description = "휴일 목록"))
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "휴일 목록"),
+        ApiResponse(
+            responseCode = "403", description = "비밀 그룹에 속해있지 않음",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
+    )
     @GetMapping
     fun getHolidays(
+        @PathVariable groupId: Long,
+
         @Schema(description = "조회 단위", required = true, implementation = DateUnitForHoliday::class)
         type: DateUnitForHoliday,
 
@@ -38,8 +55,11 @@ class HolidayController(private val holidayService: HolidayService) {
         startDate: LocalDate?,
 
         @Schema(description = "type=range - 특정 범위의 날짜 동안의 휴일 목록을 조회(종료 날짜)", example = "2024-05-30")
-        endDate: LocalDate?
+        endDate: LocalDate?,
+
+        authentication: Authentication
     ): List<LocalDate> {
+        val user = authentication.principal as User
 
         val (start, end) = when (type) {
             DateUnitForHoliday.MONTH -> {
@@ -55,26 +75,57 @@ class HolidayController(private val holidayService: HolidayService) {
             }
         }
 
-        return holidayService.getHolidaysBetweenDate(start, end)
+        return holidayService.getHolidaysBetweenDate(groupId, user, start, end)
     }
 
     @Operation(
-        hidden = true,
         summary = "휴일 추가 API",
-        description = "휴일들을 추가한다. (권한 추가를 안해서 사용하지 마십숑)"
+        description = "휴일들을 추가한다."
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "추가 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
     )
     @PostMapping
-    fun addHolidays(@RequestBody request: HolidaysRequest) {
-        holidayService.addHolidays(request.holidays)
+    fun addHolidays(
+        @PathVariable groupId: Long,
+        @RequestBody request: HolidaysRequest,
+        authentication: Authentication
+    ) {
+        val user = authentication.principal as User
+
+        holidayService.addHolidays(groupId, user, request.holidays)
     }
 
     @Operation(
-        hidden = true,
         summary = "휴일 범위로 추가 API",
-        description = "특정 범위를 모두 휴일로 추가한다. (권한 추가를 안해서 사용하지 마십숑)"
+        description = "특정 범위를 모두 휴일로 추가한다."
     )
     @PostMapping("/range")
-    fun addHolidaysBetween(@RequestBody request: AddHolidaysBetweenRequest) {
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "추가 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
+    )
+    fun addHolidaysBetween(
+        @PathVariable groupId: Long,
+        @RequestBody request: AddHolidaysBetweenRequest,
+        authentication: Authentication
+    ) {
+        val user = authentication.principal as User
         val start: LocalDate = request.start
         val end: LocalDate = request.end
 
@@ -86,16 +137,32 @@ class HolidayController(private val holidayService: HolidayService) {
             date = date.plusDays(1)
         }
 
-        holidayService.addHolidays(dates)
+        holidayService.addHolidays(groupId, user, dates)
     }
 
     @Operation(
-        hidden = true,
         summary = "휴일 삭제 API",
-        description = "휴일을 제거한다. (권한 추가를 안해서 사용하지 마십숑)"
+        description = "휴일을 제거한다."
     )
     @DeleteMapping
-    fun removeHolidays(@RequestBody request: HolidaysRequest) {
-        holidayService.removeHolidays(request.holidays)
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "삭제 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
+    )
+    fun removeHolidays(
+        @PathVariable groupId: Long,
+        @RequestBody request: HolidaysRequest,
+        authentication: Authentication
+    ) {
+        val user = authentication.principal as User
+
+        holidayService.removeHolidays(groupId, user, request.holidays)
     }
 }

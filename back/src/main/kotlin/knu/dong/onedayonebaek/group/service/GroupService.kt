@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.stream.Collectors
 
 private val myLogger = KotlinLogging.logger {}
 
@@ -32,11 +31,11 @@ class GroupService (
     private val problemRepository: ProblemRepository,
     private val passwordEncoder: PasswordEncoder
 ){
-    fun getGroups(): List<GroupOfListDto> =
-        groupRepository.findAll()
-            .stream()
-            .map { it.toGroupOfListDto() }
-            .collect(Collectors.toList())
+    fun getGroups(): List<GroupOfListDto> = groupRepository.findAll().map { it.toGroupOfListDto() }
+
+
+    fun getGroupsOfUser(user: User): List<GroupOfListDto> =
+        containGroupRepository.findAllByUser(user).map { it.group.toGroupOfListDto() }
 
     fun getGroupDetail(user: User, groupId: Long): GroupDetailDto {
         val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }

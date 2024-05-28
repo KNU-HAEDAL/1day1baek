@@ -14,4 +14,7 @@ interface ContainGroupRepository: JpaRepository<ContainGroup, Long> {
 
     @EntityGraph(attributePaths = ["user"])
     fun findAllByGroup(group: Group): List<ContainGroup>
+
+    @EntityGraph(attributePaths = ["group"])
+    fun findAllByUser(user: User): List<ContainGroup>
 }

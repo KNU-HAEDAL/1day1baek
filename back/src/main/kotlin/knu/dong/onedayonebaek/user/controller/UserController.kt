@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.common.exception.response.UnauthorizedResponse
+import knu.dong.onedayonebaek.group.dto.GroupOfListDto
+import knu.dong.onedayonebaek.group.service.GroupService
 import knu.dong.onedayonebaek.user.domain.User
 import knu.dong.onedayonebaek.user.dto.toUserDto
 import org.springframework.security.core.Authentication
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/users")
 @Tag(name = "User APIs", description = "유저 정보와 관련된 APIs")
-class UserController {
+class UserController(
+    private val groupService: GroupService
+) {
 
     @Operation(
         summary = "로그인된 유저의 정보 조회",
@@ -38,4 +42,12 @@ class UserController {
     )
     @GetMapping
     fun loginUserInfo(authentication: Authentication) = (authentication.principal as User).toUserDto()
+
+
+    @GetMapping("/my/groups")
+    fun getMyGroups(authentication: Authentication): List<GroupOfListDto> {
+        val user = authentication.principal as User
+
+        return groupService.getGroupsOfUser(user)
+    }
 }

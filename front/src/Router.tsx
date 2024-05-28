@@ -24,8 +24,8 @@ export const Router = createBrowserRouter([
         path: 'group',
         children: [
           { index: true, element: <GroupSelectionPage /> },
-          { path: ':groupName', element: <GroupPage /> },
-          { path: ':groupName/:userName', element: <GroupMemberPage /> },
+          { path: ':groupId', element: <GroupPage /> },
+          { path: ':groupId/:userName', element: <GroupMemberPage /> },
         ],
       },
     ],

@@ -32,7 +32,7 @@ describe('MainNavigation', () => {
     );
 
     // 로그아웃 아이콘이 렌더링 되는지 확인합니다.
-    expect(screen.getByLabelText('logout')).toBeInTheDocument();
+    expect(screen.queryByTestId('logout-icon')).toBeInTheDocument();
 
     // 테스트 후에 로컬 스토리지에서 access token을 제거합니다.
     localStorage.removeItem('accessToken');

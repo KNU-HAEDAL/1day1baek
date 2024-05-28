@@ -44,15 +44,15 @@ class HolidayController(private val holidayService: HolidayService) {
         @Schema(description = "조회 단위", required = true, implementation = DateUnitForHoliday::class)
         type: DateUnitForHoliday,
 
-        @Schema(description = "type=month - 특정 달의 휴일 목록을 조회", example = "2024-05",
+        @Schema(description = "type=MONTH - 특정 달의 휴일 목록을 조회", example = "2024-05",
             type = "String",
             format = "YYYY-MM")
         yearMonth: YearMonth?,
 
-        @Schema(description = "type=range - 특정 범위의 날짜 동안의 휴일 목록을 조회(시작 날짜)", example = "2024-05-28")
+        @Schema(description = "type=RANGE - 특정 범위의 날짜 동안의 휴일 목록을 조회(시작 날짜)", example = "2024-05-28")
         startDate: LocalDate?,
 
-        @Schema(description = "type=range - 특정 범위의 날짜 동안의 휴일 목록을 조회(종료 날짜)", example = "2024-05-30")
+        @Schema(description = "type=RANGE - 특정 범위의 날짜 동안의 휴일 목록을 조회(종료 날짜)", example = "2024-05-30")
         endDate: LocalDate?,
 
         authentication: Authentication

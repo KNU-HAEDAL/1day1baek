@@ -2,6 +2,8 @@ import { BiLogoGithub } from 'react-icons/bi';
 
 import { DefaultButton } from '@components/button/DefaultButton';
 
+import { BASE_URI } from '@constants/URI';
+
 import styled from '@emotion/styled';
 
 const GithubStyledButton = styled(DefaultButton)`
@@ -28,7 +30,7 @@ const GithubStyledButton = styled(DefaultButton)`
 
 const GithubButton = () => {
   const onClickLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+    window.location.href = `${BASE_URI}/oauth2/authorization/github`;
   };
 
   return (

@@ -29,4 +29,8 @@ export const Router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '/login/code',
+    element: <LoginRedirectPage />,
+  },
 ]);

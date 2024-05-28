@@ -1,9 +1,9 @@
 package knu.dong.onedayonebaek.group.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
+import knu.dong.onedayonebaek.group.domain.Group
 import knu.dong.onedayonebaek.user.dto.UserDto
 import knu.dong.onedayonebaek.user.dto.toUserDto
-import knu.dong.onedayonebaek.group.domain.Group
 
 @Schema(description = "그룹 생성 응답 DTO")
 data class GroupDetailDto(
@@ -18,6 +18,8 @@ data class GroupDetailDto(
 
     val inviteCode: String,
 
+    val goalSolveCount: Int,
+
     val users: List<UserDto>,
 
     val owner: UserDto
@@ -29,6 +31,7 @@ fun Group.toGroupDetailDto() =
         name,
         isPrivate,
         inviteCode,
+        goalSolveCount,
         users.map { it.user.toUserDto() },
         owner.toUserDto()
     )

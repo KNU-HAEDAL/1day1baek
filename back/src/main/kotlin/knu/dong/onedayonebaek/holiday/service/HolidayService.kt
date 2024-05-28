@@ -40,4 +40,12 @@ class HolidayService(private val holidayRepository: HolidayRepository) {
             date = date.plusDays(1)
         }
     }
+
+    fun getHolidaysBetweenDate(start: LocalDate, end: LocalDate): List<LocalDate> {
+        return holidayRepository
+            .findAllByDateBetween(start, end)
+            .stream()
+            .map(Holiday::date)
+            .toList()
+    }
 }

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { BiBell, BiLogIn, BiLogOut } from 'react-icons/bi';
 
@@ -52,18 +51,6 @@ const LogoImg = styled.img`
 
 const MainNavigation = () => {
   const { isAccessToken, setIsAccessToken } = useTokenStore();
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setIsAccessToken(localStorage.getItem('aId') !== null);
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, [setIsAccessToken]);
 
   const onClickLogout = () => {
     localStorage.removeItem('aId');

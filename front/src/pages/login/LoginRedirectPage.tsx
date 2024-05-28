@@ -3,9 +3,12 @@ import toast from 'react-hot-toast';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { useTokenStore } from '@stores/useTokenStore';
+
 const LoginRedirectPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { setIsAccessToken } = useTokenStore();
 
   useEffect(() => {
     const accessToken = searchParams.get('access');
@@ -18,9 +21,10 @@ const LoginRedirectPage = () => {
       localStorage.setItem('rId', refreshToken);
     }
 
-    toast.success('환영합니다! 김규회님!');
+    setIsAccessToken(localStorage.getItem('aId') !== null);
     navigate('/');
-  }, [searchParams, navigate]);
+    toast.success('환영합니다! 김규회님!');
+  }, [searchParams, navigate, setIsAccessToken]);
 
   return <></>;
 };

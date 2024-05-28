@@ -10,18 +10,22 @@ data class GroupDetailDto(
     @Schema(description = "그룹 ID", nullable = false, example = "1")
     val id: Long,
 
-    @Schema(description = "그룹 이름", required = true, example = "해달 짱")
+    @Schema(description = "그룹 이름", nullable = false, example = "해달 짱")
     val name: String,
 
-    @Schema(description = "비밀 그룹 여부", required = true, example = "false")
+    @Schema(description = "비밀 그룹 여부", nullable = false, example = "false")
     val isPrivate: Boolean,
 
+    @Schema(description = "초대 코드", nullable = false, example = "as231g")
     val inviteCode: String,
 
+    @Schema(description = "하루에 풀어야하는 문제 개수", nullable = false, example = "1")
     val goalSolveCount: Int,
 
+    @Schema(description = "그룹에 속한 유저", nullable = false)
     val users: List<UserDto>,
 
+    @Schema(description = "그룹장", nullable = false)
     val owner: UserDto
 )
 

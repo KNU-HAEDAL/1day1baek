@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
-
-import axios from 'axios';
-
+// import { useEffect } from 'react';
+// import axios from 'axios';
 import Text from '@components/typography/Text';
+
+import { useUserData } from '@hooks/queries/feed/getUserDataQuery';
 
 import DefaultProfileImg from '@assets/HaedalProfile.png';
 
-import { useUserDataStore } from '@stores/useUserDataStore';
-
+// import { useCommits } from '@/hooks/queries/feed/getUserCommitQuery';
+// import { useUserDataStore } from '@stores/useUserDataStore';
 import styled from '@emotion/styled';
 
 const ProfileLayout = styled.div`
@@ -34,56 +34,80 @@ const ProfileTextLayout = styled.div`
 
 const Profile = () => {
   const {
-    setUsername,
-    getUsername,
-    setProfileImg,
-    getProfileImg,
-    setCommit,
-    getCommit,
-  } = useUserDataStore();
-  const username = getUsername();
-  const commitNum = getCommit();
-  const profileImg = getProfileImg();
+    data: userData,
+    isPending: userPending,
+    isError: userError,
+  } = useUserData();
+  // const { data: commit } = useCommits();
+  const username = userData?.loginId || '';
+  const profileImg = userData?.profileUrl || DefaultProfileImg;
+  // const commitNum = commit?.commit || 0;
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get('/api/profile');
-        setUsername(res.data.name);
-        setProfileImg(res.data.url);
-        console.log(res.data.url);
-      } catch (e) {
-        console.error('Error fetching profile:', e);
-      }
-    };
+  // console.log('commit', commit);
+  // MSW Test CODE
+  // const {
+  //   setUsername,
+  //   getUsername,
+  //   setProfileImg,
+  //   getProfileImg,
+  //   setCommit,
+  //   getCommit,
+  // } = useUserDataStore();
+  // const username = getUsername();
+  // const commitNum = getCommit();
+  // const profileImg = getProfileImg();
 
-    fetchProfile();
-  }, [setUsername, setProfileImg]);
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     try {
+  //       const res = await axios.get('/api/profile');
+  //       setUsername(res.data.name);
+  //       setProfileImg(res.data.url);
+  //       console.log(res.data.url);
+  //     } catch (e) {
+  //       console.error('Error fetching profile:', e);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchCommit = async () => {
-      try {
-        const res = await axios.get('/api/commit');
-        setCommit(res.data.commit);
-      } catch (e) {
-        console.error('Error fetching commit:', e);
-      }
-    };
+  //   fetchProfile();
+  // }, [setUsername, setProfileImg]);
 
-    fetchCommit();
-  }, [setCommit]);
+  // useEffect(() => {
+  //   const fetchCommit = async () => {
+  //     try {
+  //       const res = await axios.get('/api/commit');
+  //       setCommit(res.data.commit);
+  //     } catch (e) {
+  //       console.error('Error fetching commit:', e);
+  //     }
+  //   };
+
+  //   fetchCommit();
+  // }, [setCommit]);
 
   return (
     <>
       <ProfileLayout>
-        <StyledProfileImg imgUrl={profileImg || DefaultProfileImg} />
+        <StyledProfileImg imgUrl={profileImg} />
         <ProfileTextLayout>
-          <Text size='var(--size-sm)' weight='600'>
-            {username}님 반갑습니다!
-          </Text>
-          <Text size='var(--size-xs)' weight='600'>
-            오늘의 커밋 개수는 {commitNum}개 입니다.
-          </Text>
+          {userPending ? (
+            <Text size='var(--size-sm)' weight='600'>
+              Loading...
+            </Text>
+          ) : userError ? (
+            <Text size='var(--size-sm)' weight='600'>
+              네트워크 오류입니다.
+            </Text>
+          ) : (
+            <>
+              <Text size='var(--size-sm)' weight='600'>
+                {username}님 반갑습니다!
+              </Text>
+              <Text size='var(--size-xs)' weight='600'>
+                오늘의 커밋 개수는 0개 입니다.
+              </Text>
+            </>
+          )}
         </ProfileTextLayout>
       </ProfileLayout>
     </>

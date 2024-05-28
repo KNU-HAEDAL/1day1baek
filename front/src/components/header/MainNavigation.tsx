@@ -108,7 +108,11 @@ const MainNavigation = () => {
           ) : (
             <MainNavigateItem>
               <LinkText to='/login' color='var(--color-black)'>
-                <BiLogIn size={21} aria-label='login' />
+                <BiLogIn
+                  size={21}
+                  aria-label='login'
+                  data-testid='logout-icon'
+                />
               </LinkText>
             </MainNavigateItem>
           )}

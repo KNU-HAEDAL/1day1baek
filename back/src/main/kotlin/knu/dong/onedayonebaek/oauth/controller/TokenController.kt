@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/token")
-@Tag(name = "Token APIs", description = "JWT 토큰과 관련된 API")
+@Tag(name = "Token APIs", description = "JWT 토큰과 관련된 APIs")
 class TokenController(private val tokenService: TokenService) {
 
     @GetMapping("/refresh")

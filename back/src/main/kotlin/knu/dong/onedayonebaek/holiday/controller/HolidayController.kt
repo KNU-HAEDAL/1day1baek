@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.common.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.common.exception.response.ForbiddenResponse
 import knu.dong.onedayonebaek.common.exception.response.NotFoundResponse
-import knu.dong.onedayonebaek.holiday.dto.AddHolidaysBetweenRequest
-import knu.dong.onedayonebaek.holiday.dto.DateUnitForHoliday
-import knu.dong.onedayonebaek.holiday.dto.HolidaysRequest
+import knu.dong.onedayonebaek.holiday.dto.*
 import knu.dong.onedayonebaek.holiday.service.HolidayService
 import knu.dong.onedayonebaek.user.domain.User
 import org.springframework.security.core.Authentication
@@ -105,6 +103,49 @@ class HolidayController(private val holidayService: HolidayService) {
     }
 
     @Operation(
+        summary = "특정 요일을 휴일로 추가하는 API",
+        description = "지정된 요일을 휴일로 추가한다."
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "추가 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
+    )
+    @PostMapping("/dayOfWeek")
+    fun addHolidaysUsingDayOfWeek(
+        @PathVariable groupId: Long,
+        @RequestBody requestDto: AddHolidaysUsingDayOfWeekRequest,
+        authentication: Authentication
+    ) {
+        val user = authentication.principal as User
+
+        val valueDayOfWeeks = requestDto.dayOfWeeks.map { it.value }
+        val startDate = LocalDate.now()
+        val endDate = startDate.plusYears(1)
+
+
+        val holidays = arrayListOf<LocalDate>()
+        var date = startDate
+        while (!date.isAfter(endDate)) {
+            val dayOfWeek = date.dayOfWeek.value
+
+            if (dayOfWeek in valueDayOfWeeks) {
+                holidays.add(date)
+            }
+
+            date = date.plusDays(1)
+        }
+
+        holidayService.addHolidays(groupId, user, holidays)
+    }
+
+    @Operation(
         summary = "휴일 범위로 추가 API",
         description = "특정 범위를 모두 휴일로 추가한다."
     )
@@ -126,8 +167,8 @@ class HolidayController(private val holidayService: HolidayService) {
         authentication: Authentication
     ) {
         val user = authentication.principal as User
-        val start: LocalDate = request.start
-        val end: LocalDate = request.end
+        val start: LocalDate = request.startDate
+        val end: LocalDate = request.endDate
 
         val dates: MutableList<LocalDate> = ArrayList()
 

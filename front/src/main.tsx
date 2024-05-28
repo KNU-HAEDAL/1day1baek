@@ -14,7 +14,7 @@ const enableMocking = async () => {
     return;
   }
 
-  console.log('start!');
+  // console.log('start!');
   return worker.start();
 };
 

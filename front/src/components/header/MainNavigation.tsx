@@ -1,8 +1,12 @@
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { BiBell, BiLogIn, BiLogOut } from 'react-icons/bi';
 
 import LinkText from '@components/typography/LinkText';
 
 import HaedalText from '@assets/HaedalText.png';
+
+import { useTokenStore } from '@stores/useTokenStore';
 
 import styled from '@emotion/styled';
 
@@ -47,7 +51,26 @@ const LogoImg = styled.img`
 `;
 
 const MainNavigation = () => {
-  const isAccessToken = localStorage.getItem('accessToken');
+  const { isAccessToken, setIsAccessToken } = useTokenStore();
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAccessToken(localStorage.getItem('aId') !== null);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [setIsAccessToken]);
+
+  const onClickLogout = () => {
+    localStorage.removeItem('aId');
+    localStorage.removeItem('rId');
+    setIsAccessToken(false);
+    toast.success('로그아웃 되었습니다.');
+  };
 
   return (
     <MainNavigateDiv>
@@ -93,7 +116,7 @@ const MainNavigation = () => {
           </MainNavigateItem>
           {isAccessToken ? (
             <MainNavigateItem>
-              <BiLogOut size={21} aria-label='logout' />
+              <BiLogOut size={21} aria-label='logout' onClick={onClickLogout} />
             </MainNavigateItem>
           ) : (
             <MainNavigateItem>

@@ -18,8 +18,8 @@ const LoginRedirectPage = () => {
       localStorage.setItem('rId', refreshToken);
     }
 
-    navigate('/');
     toast.success('환영합니다! 김규회님!');
+    navigate('/');
   }, [searchParams, navigate]);
 
   return <></>;

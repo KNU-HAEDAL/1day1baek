@@ -36,9 +36,19 @@ class FineService(
             val userDto = user.toUserDto()
 
             if (problemsOfUsers.containsKey(user.id)) {
-                val solvedDates = problemsOfUsers[user.id]!!.map { it.solvedDate }.toSet()
+                val solvedDates = problemsOfUsers[user.id]!!
+                    .groupingBy { it.solvedDate }.eachCount()
 
-                result[userDto] = targetDates.count { !solvedDates.contains(it) } * group.fine
+                myLogger.error { solvedDates }
+                myLogger.error { targetDates }
+                result[userDto] = targetDates.count {
+                    if (solvedDates.containsKey(it)) {
+                        solvedDates[it]!! < group.goalSolveCount
+                    }
+                    else {
+                        true
+                    }
+                } * group.fine
             }
             else {
                 result[userDto] = targetDates.size * group.fine

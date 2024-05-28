@@ -4,6 +4,7 @@ import knu.dong.onedayonebaek.holiday.domain.Holiday
 import knu.dong.onedayonebaek.holiday.repository.HolidayRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 @Service
@@ -24,5 +25,19 @@ class HolidayService(private val holidayRepository: HolidayRepository) {
     @Transactional
     fun removeHolidays(dates: List<LocalDate>) {
         holidayRepository.deleteByDateIn(dates)
+    }
+
+    @Transactional
+    fun sync(start: LocalDate, end: LocalDate) {
+        var date = start
+        while (!date.isAfter(end)) {
+            val dayOfWeek = date.dayOfWeek
+            if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+                if (!holidayRepository.existsByDate(date)) {
+                    holidayRepository.save(Holiday(date = date))
+                }
+            }
+            date = date.plusDays(1)
+        }
     }
 }

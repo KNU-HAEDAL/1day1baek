@@ -14,7 +14,7 @@ import knu.dong.onedayonebaek.common.exception.response.BadRequestResponse
 import knu.dong.onedayonebaek.common.exception.response.ConflictResponse
 import knu.dong.onedayonebaek.common.exception.response.ForbiddenResponse
 import knu.dong.onedayonebaek.common.exception.response.NotFoundResponse
-import knu.dong.onedayonebaek.group.dto.CreateGroupRequest
+import knu.dong.onedayonebaek.group.dto.CreateOrUpdateGroupRequest
 import knu.dong.onedayonebaek.group.dto.GroupDetailDto
 import knu.dong.onedayonebaek.group.dto.JoinGroupRequest
 import knu.dong.onedayonebaek.group.dto.JoinGroupWithInviteCodeRequest
@@ -80,7 +80,7 @@ class GroupController(
         )
     )
     fun createGroup(
-        @Validated @RequestBody requestDto: CreateGroupRequest,
+        @Validated @RequestBody requestDto: CreateOrUpdateGroupRequest,
         authentication: Authentication
     ): GroupDetailDto {
         val user = authentication.principal as User
@@ -90,6 +90,32 @@ class GroupController(
         }
 
         return groupService.createGroup(user, requestDto)
+    }
+
+    @Operation(
+        summary = "그룹 수정",
+        description = "그룹 정보를 수정한다."
+    )
+    @PutMapping("/{groupId}")
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "스터디 그룹 상세 정보"),
+        ApiResponse(
+            responseCode = "400", description = "잘못된 Request Parameter",
+            content = [Content(schema = Schema(implementation = InvalidReqParamException::class))],
+        )
+    )
+    fun updateGroup(
+        @PathVariable groupId: Long,
+        @Validated @RequestBody requestDto: CreateOrUpdateGroupRequest,
+        authentication: Authentication
+    ): GroupDetailDto {
+        val user = authentication.principal as User
+
+        if (requestDto.isPrivate && requestDto.password?.isBlank() != false) {
+            throw InvalidReqParamException("비밀 그룹은 비밀번호가 필요합니다.")
+        }
+
+        return groupService.updateGroup(user, groupId, requestDto)
     }
 
     @Operation(

@@ -8,8 +8,8 @@ import jakarta.validation.constraints.Size
 import knu.dong.onedayonebaek.group.domain.Group
 import knu.dong.onedayonebaek.user.domain.User
 
-@Schema(description = "그룹 생성 요청 DTO")
-data class CreateGroupRequest(
+@Schema(description = "그룹을 생성하거나 수정하는 API의 Request Body")
+data class CreateOrUpdateGroupRequest(
     @field:NotBlank
     @field:Size(min = 2, max = 100)
     @Schema(description = "그룹 이름", required = true, example = "해달 짱")
@@ -27,5 +27,5 @@ data class CreateGroupRequest(
     val goalSolveCount: Int = 1
 )
 
-fun CreateGroupRequest.toEntity(inviteCode: String, owner: User) =
+fun CreateOrUpdateGroupRequest.toEntity(inviteCode: String, owner: User) =
     Group(name = name, isPrivate = isPrivate, password = password, inviteCode = inviteCode, owner = owner, goalSolveCount = goalSolveCount)

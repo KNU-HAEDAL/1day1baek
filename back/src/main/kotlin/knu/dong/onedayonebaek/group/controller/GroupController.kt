@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.common.dto.DateUnit
 import knu.dong.onedayonebaek.common.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.common.exception.response.BadRequestResponse
+import knu.dong.onedayonebaek.common.exception.response.ConflictResponse
 import knu.dong.onedayonebaek.common.exception.response.ForbiddenResponse
 import knu.dong.onedayonebaek.common.exception.response.NotFoundResponse
 import knu.dong.onedayonebaek.group.dto.CreateGroupRequest
@@ -200,6 +201,44 @@ class GroupController(
         val user = authentication.principal as User
 
         groupService.leaveGroup(user, groupId)
+    }
+
+    @Operation(
+        summary = "그룹원 내보내기",
+        description = "특정 그룹원을 그룹에서 내보낸다. 그룹 관리자만 사용가능하다."
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "사용자 내보내기 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(
+                schema = Schema(implementation = ForbiddenResponse::class),
+                examples = [
+                    ExampleObject(
+                        name = "내보내려는 사용자가 없음",
+                        value = "{\"code\": \"not_found_group\", \"message\":\"해당 그룹이 없습니다.\"}"
+                    ), ExampleObject(
+                        name = "그룹이 없음",
+                        value = "{\"code\": \"not_found_user\", \"message\":\"해당 유저가 없습니다.\"}"
+                    )
+                ],
+                mediaType = MediaType.APPLICATION_JSON_VALUE
+            )]
+        ),
+        ApiResponse(
+            responseCode = "409", description = "본인을 내보낼 수는 없음",
+            content = [Content(schema = Schema(implementation = ConflictResponse::class))],
+        ),
+    )
+    @DeleteMapping("/{groupId}/kick/{targetUserId}")
+    fun kickGroupUser(@PathVariable groupId: Long, @PathVariable targetUserId: Long, authentication: Authentication) {
+        val user = authentication.principal as User
+
+        groupService.kickGroupUser(user, groupId, targetUserId)
     }
 
     @Operation(

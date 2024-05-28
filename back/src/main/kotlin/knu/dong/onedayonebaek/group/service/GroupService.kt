@@ -1,18 +1,18 @@
 package knu.dong.onedayonebaek.group.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import knu.dong.onedayonebaek.containgroup.domain.ContainGroup
-import knu.dong.onedayonebaek.problem.domain.Problem
-import knu.dong.onedayonebaek.user.domain.User
 import knu.dong.onedayonebaek.common.exception.ConflictException
 import knu.dong.onedayonebaek.common.exception.ForbiddenException
 import knu.dong.onedayonebaek.common.exception.NotFoundException
-import knu.dong.onedayonebaek.group.repository.GroupRepository
+import knu.dong.onedayonebaek.containgroup.domain.ContainGroup
 import knu.dong.onedayonebaek.containgroup.repository.ContainGroupRepository
 import knu.dong.onedayonebaek.group.dto.*
+import knu.dong.onedayonebaek.group.repository.GroupRepository
+import knu.dong.onedayonebaek.problem.domain.Problem
 import knu.dong.onedayonebaek.problem.dto.ProblemsOfUser
 import knu.dong.onedayonebaek.problem.dto.toProblemDto
 import knu.dong.onedayonebaek.problem.repository.ProblemRepository
+import knu.dong.onedayonebaek.user.domain.User
 import knu.dong.onedayonebaek.user.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -39,13 +39,13 @@ class GroupService (
             .collect(Collectors.toList())
 
     fun getGroupDetail(user: User, groupId: Long): GroupDetailDto {
-        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
 
         if (!group.isPrivate || containGroupRepository.existsByGroupAndUser(group, user)) {
             return group.toGroupDetailDto()
         }
 
-        throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+        throw ForbiddenException(message = "해당 비밀 그룹에 속해있지 않습니다.")
     }
 
     @Transactional
@@ -70,7 +70,7 @@ class GroupService (
 
     @Transactional
     fun joinGroup(user: User, groupId: Long, password: String?): GroupDetailDto {
-        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
 
         if (containGroupRepository.existsByGroupAndUser(group, user)) {
             throw ConflictException("already_joined", "이미 가입된 스터디 그룹입니다.")
@@ -101,7 +101,7 @@ class GroupService (
     fun joinGroupWithInviteCode(user: User, inviteCode: String): GroupDetailDto {
         val group = groupRepository
             .findByInviteCode(inviteCode)
-            .orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+            .orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
 
         if (containGroupRepository.existsByGroupAndUser(group, user)) {
             throw ConflictException("already_joined", "이미 가입된 스터디 그룹입니다.")
@@ -114,7 +114,7 @@ class GroupService (
 
     @Transactional
     fun leaveGroup(user: User, groupId: Long) {
-        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
         if (group.owner.id == user.id) {
             throw ConflictException("not_allowed_leave_group_owner", "그룹 장은 나갈 수 없습니다.")
         }
@@ -127,10 +127,29 @@ class GroupService (
         containGroupRepository.delete(containGroup)
     }
 
+    @Transactional
+    fun kickGroupUser(owner: User, groupId: Long, targetUserId: Long) {
+        val group = groupRepository.findById(groupId)
+            .orElseThrow{ NotFoundException(code = "not_found_group", message = "해당 그룹이 없습니다.") }
+        if (group.owner.id != owner.id) {
+            throw ForbiddenException(message = "관리자만 내보낼 수 있습니다.")
+        }
+        if (owner.id == targetUserId) {
+            throw ConflictException(message = "본인은 내보낼 수 없습니다.")
+        }
+
+        val targetUser = userRepository.findById(targetUserId)
+            .orElseThrow { NotFoundException(code = "not_found_user", message = "해당 유저가 없습니다.") }
+
+        containGroupRepository
+            .findByGroupAndUser(group, targetUser)
+            .ifPresent { containGroupRepository.delete(it) }
+    }
+
     fun getProblems(user: User, groupId: Long, date: LocalDate): List<ProblemsOfUser> {
-        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
         if (group.isPrivate && !containGroupRepository.existsByGroupAndUser(group, user)) {
-            throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+            throw ForbiddenException(message = "해당 비밀 그룹에 속해있지 않습니다.")
         }
 
         val users = containGroupRepository.findAllByGroup(group).map { it.user }
@@ -141,9 +160,9 @@ class GroupService (
     }
 
     fun getProblems(user: User, groupId: Long, yearMonth: YearMonth): List<ProblemsOfUser> {
-        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
         if (group.isPrivate && !containGroupRepository.existsByGroupAndUser(group, user)) {
-            throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+            throw ForbiddenException(message = "해당 비밀 그룹에 속해있지 않습니다.")
         }
 
         val users = containGroupRepository.findAllByGroup(group).map { it.user }
@@ -156,9 +175,9 @@ class GroupService (
     }
 
     fun getProblems(user: User, groupId: Long, startDate: LocalDate, endDate: LocalDate): List<ProblemsOfUser> {
-        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException("해당 그룹이 없습니다.") }
+        val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
         if (group.isPrivate && !containGroupRepository.existsByGroupAndUser(group, user)) {
-            throw ForbiddenException("해당 비밀 그룹에 속해있지 않습니다.")
+            throw ForbiddenException(message = "해당 비밀 그룹에 속해있지 않습니다.")
         }
 
         val users = containGroupRepository.findAllByGroup(group).map { it.user }

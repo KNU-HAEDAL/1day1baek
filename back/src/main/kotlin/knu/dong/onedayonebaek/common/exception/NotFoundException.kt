@@ -1,3 +1,6 @@
 package knu.dong.onedayonebaek.common.exception
 
-class NotFoundException(message: String = "Not Found"): RuntimeException(message)
+class NotFoundException(
+    val code: String = "not_found",
+    message: String = "Not Found"
+): RuntimeException(message)

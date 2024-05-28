@@ -36,9 +36,16 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
+        throw new Error('토큰 갱신에 실패했습니다.');
       }
     }
 
-    return Promise.reject(error);
+    if (error.response) {
+      return Promise.reject(error.response.data);
+    } else if (error.request) {
+      return Promise.reject('네트워크 오류입니다. 인터넷 연결을 확인해주세요.');
+    } else {
+      return Promise.reject('요청을 전송할 수 없습니다.');
+    }
   }
 );

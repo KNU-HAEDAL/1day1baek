@@ -120,27 +120,12 @@ class HolidayController(private val holidayService: HolidayService) {
     @PostMapping("/dayOfWeek")
     fun addHolidaysUsingDayOfWeek(
         @PathVariable groupId: Long,
-        @RequestBody requestDto: AddHolidaysUsingDayOfWeekRequest,
+        @RequestBody requestDto: HolidaysUsingDayOfWeekRequest,
         authentication: Authentication
     ) {
         val user = authentication.principal as User
 
-        val valueDayOfWeeks = requestDto.dayOfWeeks.map { it.value }
-        val startDate = LocalDate.now()
-        val endDate = startDate.plusYears(1)
-
-
-        val holidays = arrayListOf<LocalDate>()
-        var date = startDate
-        while (!date.isAfter(endDate)) {
-            val dayOfWeek = date.dayOfWeek.value
-
-            if (dayOfWeek in valueDayOfWeeks) {
-                holidays.add(date)
-            }
-
-            date = date.plusDays(1)
-        }
+        val holidays = calculateLocalDatesOf(requestDto.dayOfWeeks)
 
         holidayService.addHolidays(groupId, user, holidays)
     }
@@ -205,5 +190,54 @@ class HolidayController(private val holidayService: HolidayService) {
         val user = authentication.principal as User
 
         holidayService.removeHolidays(groupId, user, request.holidays)
+    }
+
+    @Operation(
+        summary = "특정 요일을 휴일에서 제거하는 API",
+        description = "특정 요일을 휴일에서 제거한다."
+    )
+    @DeleteMapping("/dayOfWeek")
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "삭제 성공"),
+        ApiResponse(
+            responseCode = "403", description = "그룹 관리자가 아님",
+            content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
+        ),
+        ApiResponse(
+            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            content = [Content(schema = Schema(implementation = NotFoundResponse::class,))]
+        )
+    )
+    fun removeHolidaysUsingDayOfWeek(
+        @PathVariable groupId: Long,
+        @RequestBody requestDto: HolidaysUsingDayOfWeekRequest,
+        authentication: Authentication
+    ) {
+        val user = authentication.principal as User
+
+        val holidays = calculateLocalDatesOf(requestDto.dayOfWeeks)
+
+        holidayService.removeHolidays(groupId, user, holidays)
+    }
+
+    private fun calculateLocalDatesOf(dayOfWeeks: List<DayOfWeek>): List<LocalDate> {
+        val valueDayOfWeeks = dayOfWeeks.map { it.value }
+
+        val startDate = LocalDate.now()
+        val endDate = startDate.plusYears(1)
+
+        val localDates = arrayListOf<LocalDate>()
+        var date = startDate
+        while (!date.isAfter(endDate)) {
+            val dayOfWeek = date.dayOfWeek.value
+
+            if (dayOfWeek in valueDayOfWeeks) {
+                localDates.add(date)
+            }
+
+            date = date.plusDays(1)
+        }
+
+        return localDates
     }
 }

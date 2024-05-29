@@ -17,6 +17,7 @@ const colorGray = '#d9d9d9';
 const colorBlue = '#4285F4';
 const colorRed = '#ff6f61';
 const colorGreen = '#4CAF50';
+const colorYellow = '#FBBC05';
 const colorLightYellow = '#fff5e6';
 const colorBorderYellow = '#ffebcd';
 const colorSpacePrimary = '#04094f';
@@ -41,6 +42,7 @@ export const GlobalStyle = css`
     --color-gray: ${colorGray};
     --color-blue: ${colorBlue};
     --color-red: ${colorRed};
+    --color-yellow: ${colorYellow};
     --color-green: ${colorGreen};
     --color-lyellow: ${colorLightYellow};
     --color-byellow: ${colorBorderYellow};

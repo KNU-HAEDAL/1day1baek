@@ -42,6 +42,26 @@ const InputResultLayout = styled.div`
   padding: 0.5rem 1rem;
 `;
 
+const GroupType = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: var(--color-white);
+  width: 60px;
+  height: 20px;
+  border-radius: 12px;
+  background-color: var(--color-red);
+  font-size: var(--size-xs);
+`;
+
+const GroupTypeLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const SearchResult = () => {
   const { data, isPending, isError, error } = useGroups();
 
@@ -61,18 +81,33 @@ const SearchResult = () => {
     return <InputResultLayout>검색 결과가 없습니다.</InputResultLayout>;
   }
 
+  const filteredGroups = data.filter((group: IGroupProps) => !group.isMember);
+
   const onClickNav = () => {};
 
   return (
     <InputResultLayout>
-      {data.map((group: IGroupProps) => (
-        <SearchResultLayout key={group.id}>
-          <Text size='var(--size-sm)' weight='700' color='var(--color-black)'>
-            {group.name}
-          </Text>
-          <PButton onClick={onClickNav}>참여하기</PButton>
-        </SearchResultLayout>
-      ))}
+      {filteredGroups.length === 0 ? (
+        <Text size='var(--size-sm)' weight='700' color='var(--color-black)'>
+          조건에 맞는 검색 결과가 없습니다.
+        </Text>
+      ) : (
+        filteredGroups.map((group: IGroupProps) => (
+          <SearchResultLayout key={group.id}>
+            <GroupTypeLayout>
+              <Text
+                size='var(--size-sm)'
+                weight='700'
+                color='var(--color-black)'
+              >
+                {group.name}
+              </Text>
+              <GroupType>{group.isPrivate ? 'Private' : 'Public'}</GroupType>
+            </GroupTypeLayout>
+            <PButton onClick={onClickNav}>참여하기</PButton>
+          </SearchResultLayout>
+        ))
+      )}
     </InputResultLayout>
   );
 };

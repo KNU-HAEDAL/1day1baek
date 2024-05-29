@@ -2,6 +2,7 @@ export interface IGroupProps {
   id: number;
   name: string;
   isPrivate: boolean;
+  isMember: boolean;
 }
 
 export interface ICreateGroupModalProps {

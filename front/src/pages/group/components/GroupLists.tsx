@@ -9,18 +9,18 @@ import { IGroupProps } from '@interfaces/GroupInterface';
 
 import styled from '@emotion/styled';
 
-const MyGroupLists = [
-  {
-    id: 1,
-    name: '해달 파이팅',
-    isPrivate: false,
-  },
-  {
-    id: 2,
-    name: '해달 고고',
-    isPrivate: false,
-  },
-];
+// const MyGroupLists = [
+//   {
+//     id: 1,
+//     name: '해달 파이팅',
+//     isPrivate: false,
+//   },
+//   {
+//     id: 2,
+//     name: '해달 고고',
+//     isPrivate: false,
+//   },
+// ];
 
 const GroupContainer = styled.div`
   padding: 20px;

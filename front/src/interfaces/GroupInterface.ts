@@ -30,3 +30,17 @@ export interface ISelectUsersProps {
   name: string;
   profileUrl: string;
 }
+
+export interface IGroupTeamProps {
+  problems: IGroupProblemProps[];
+  username: string;
+  userId: number;
+}
+
+export interface IGroupProblemProps {
+  solvedDate: string;
+  commitUrl: string;
+  username: string;
+  title: string;
+  rank: string;
+}

@@ -6,7 +6,6 @@ export const useUserData = () => {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['users'],
     queryFn: getUserData,
-    refetchOnMount: false,
   });
 
   return { data, isPending, isError, error };

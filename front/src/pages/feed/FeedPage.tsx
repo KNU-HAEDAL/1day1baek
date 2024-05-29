@@ -17,6 +17,7 @@ import { IProblem } from '@interfaces/ProblemInterface';
 
 import { Layout, DisplayLayout, LoginLayout } from '@styles/Layout';
 
+import { useProblemMonth } from '@/hooks/queries/feed/getProblemMonth';
 import styled from '@emotion/styled';
 import 'dayjs/locale/ko';
 
@@ -93,13 +94,17 @@ const FeedPage = () => {
   const formattedDate = selectedDate
     ? dayjs(selectedDate).format('YYYY-MM-DD')
     : '';
+
+  const formattedMonth = selectedDate
+    ? dayjs(selectedDate).format('YYYY-MM')
+    : dayjs().format('YYYY-MM');
   const {
     data: problemData,
     isPending: problemPending,
     isError: problemError,
   } = useProblem(formattedDate);
+  const { data: problemDataMonth } = useProblemMonth(formattedMonth);
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const formatDay = (_locale: string | undefined, date: Date) =>
     dayjs(date).format('D');
 
@@ -123,9 +128,9 @@ const FeedPage = () => {
                 onClickDay={handleDateClick}
                 tileContent={({ date, view }) =>
                   view === 'month' &&
-                  problemData &&
-                  problemData.length > 0 &&
-                  problemData.some(
+                  problemDataMonth &&
+                  problemDataMonth.length > 0 &&
+                  problemDataMonth.some(
                     (problem: IProblem) =>
                       problem.solvedDate === dayjs(date).format('YYYY-MM-DD')
                   ) ? (
@@ -134,26 +139,14 @@ const FeedPage = () => {
                 }
               />
             </CalendarLayout>
-            {/* {selectedDate &&
-          problemRecords.find(
-            (problem) => problem.solvedDate === formattedDate
-          ) ? (
-            <ProblemList
-              problems={problemRecords}
-              formattedDate={formattedDate}
-            />
-          ) : (
-            <div style={{ width: '470px' }} />
-          )} */}
-            {selectedDate &&
-              problemData &&
-              !problemPending &&
-              !problemError && (
-                <ProblemList
-                  problems={problemData}
-                  formattedDate={formattedDate}
-                />
-              )}
+            {selectedDate && problemData && !problemPending && !problemError ? (
+              <ProblemList
+                problems={problemData}
+                formattedDate={formattedDate}
+              />
+            ) : (
+              <div style={{ width: 470 }}></div>
+            )}
           </FeedLayout>
         ) : (
           <LoginLayout>

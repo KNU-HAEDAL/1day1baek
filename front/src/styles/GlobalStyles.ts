@@ -52,6 +52,8 @@ export const GlobalStyle = css`
   * {
     box-sizing: border-box;
     transition: all 0.3s ease-out;
+    animation: name duration timing-function delay iteration-count direction
+      fill-mode;
   }
 
   body {

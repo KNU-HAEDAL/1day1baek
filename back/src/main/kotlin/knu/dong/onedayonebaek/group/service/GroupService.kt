@@ -43,9 +43,10 @@ class GroupService (
 
     fun getGroupDetail(user: User, groupId: Long): GroupDetailDto {
         val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }
+        val isMember = containGroupRepository.existsByGroupAndUser(group, user)
 
-        if (!group.isPrivate || containGroupRepository.existsByGroupAndUser(group, user)) {
-            return group.toGroupDetailDto()
+        if (!group.isPrivate || isMember) {
+            return group.toGroupDetailDto(isMember = isMember)
         }
 
         throw ForbiddenException(message = "해당 비밀 그룹에 속해있지 않습니다.")
@@ -71,7 +72,7 @@ class GroupService (
 
         createdGroup.users.add(createdCG)
 
-        return group.toGroupDetailDto()
+        return group.toGroupDetailDto(isMember = true)
     }
 
     @Transactional
@@ -95,7 +96,7 @@ class GroupService (
 
         val updatedGroup = groupRepository.save(existingGroup)
 
-        return updatedGroup.toGroupDetailDto()
+        return updatedGroup.toGroupDetailDto(isMember = true)
     }
 
     @Transactional
@@ -109,7 +110,7 @@ class GroupService (
         if (!group.isPrivate) {
             containGroupRepository.save(ContainGroup(user, group))
 
-            return group.toGroupDetailDto()
+            return group.toGroupDetailDto(isMember = true)
         }
 
         if (password == null) {
@@ -121,7 +122,7 @@ class GroupService (
         if (isCorrectPW) {
             containGroupRepository.save(ContainGroup(user, group))
 
-            return group.toGroupDetailDto()
+            return group.toGroupDetailDto(isMember = true)
         }
 
         throw ConflictException("incorrect_password", "비밀번호가 다릅니다.")
@@ -139,7 +140,7 @@ class GroupService (
 
         containGroupRepository.save(ContainGroup(user, group))
 
-        return group.toGroupDetailDto()
+        return group.toGroupDetailDto(isMember = true)
     }
 
     @Transactional

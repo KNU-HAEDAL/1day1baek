@@ -25,6 +25,9 @@ data class GroupDetailDto(
     @Schema(description = "문제를 풀지 않은 날 매겨지는 벌금", nullable = false, example = "1000")
     val fine: Int,
 
+    @Schema(description = "해당 그룹에 속해있는지 여부", nullable = false, example = "false")
+    val isMember: Boolean,
+
     @Schema(description = "그룹에 속한 유저", nullable = false)
     val users: List<UserDto>,
 
@@ -32,15 +35,16 @@ data class GroupDetailDto(
     val owner: UserDto
 )
 
-fun Group.toGroupDetailDto() =
+fun Group.toGroupDetailDto(isMember: Boolean) =
     GroupDetailDto(
-        id!!,
-        name,
-        isPrivate,
-        inviteCode,
-        goalSolveCount,
-        fine,
-        users.map { it.user.toUserDto() },
-        owner.toUserDto()
+        id = id!!,
+        name = name,
+        isPrivate = isPrivate,
+        inviteCode = inviteCode,
+        goalSolveCount = goalSolveCount,
+        fine = fine,
+        isMember = isMember,
+        users = users.map { it.user.toUserDto() },
+        owner = owner.toUserDto()
     )
 

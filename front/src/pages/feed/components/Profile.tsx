@@ -2,11 +2,11 @@
 // import axios from 'axios';
 import Text from '@components/typography/Text';
 
+import { useCommits } from '@hooks/queries/feed/getUserCommitQuery';
 import { useUserData } from '@hooks/queries/feed/getUserDataQuery';
 
 import DefaultProfileImg from '@assets/HaedalProfile.png';
 
-// import { useCommits } from '@/hooks/queries/feed/getUserCommitQuery';
 // import { useUserDataStore } from '@stores/useUserDataStore';
 import styled from '@emotion/styled';
 
@@ -38,12 +38,12 @@ const Profile = () => {
     isPending: userPending,
     isError: userError,
   } = useUserData();
-  // const { data: commit } = useCommits();
+  const { data: commit } = useCommits();
   const username = userData?.loginId || '';
   const profileImg = userData?.profileUrl || DefaultProfileImg;
-  // const commitNum = commit?.commit || 0;
+  const commitNum = commit?.count || 0;
 
-  // console.log('commit', commit);
+  // console.log('commit', commit.count);
   // MSW Test CODE
   // const {
   //   setUsername,
@@ -104,7 +104,7 @@ const Profile = () => {
                 {username}님 반갑습니다!
               </Text>
               <Text size='var(--size-xs)' weight='600'>
-                오늘의 커밋 개수는 0개 입니다.
+                오늘의 커밋 개수는 {commitNum}개 입니다.
               </Text>
             </>
           )}

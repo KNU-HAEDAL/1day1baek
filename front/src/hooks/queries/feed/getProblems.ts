@@ -2,10 +2,10 @@ import { getUserProblems } from '@services/feed/getProblems';
 
 import { useQuery } from '@tanstack/react-query';
 
-export const useProblem = () => {
+export const useProblem = (date: string | null) => {
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ['userProblems'],
-    queryFn: getUserProblems,
+    queryKey: ['userProblems', date],
+    queryFn: () => (date ? getUserProblems(date) : Promise.resolve([])),
     refetchOnMount: false,
   });
 

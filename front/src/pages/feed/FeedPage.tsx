@@ -90,11 +90,14 @@ const ProfileWrapper = styled.div`
 const FeedPage = () => {
   const { isAccessToken } = useTokenStore();
   const { selectedDate, setSelectedDate } = useFeedStore();
+  const formattedDate = selectedDate
+    ? dayjs(selectedDate).format('YYYY-MM-DD')
+    : '';
   const {
     data: problemData,
     isPending: problemPending,
     isError: problemError,
-  } = useProblem();
+  } = useProblem(formattedDate);
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const formatDay = (_locale: string | undefined, date: Date) =>
@@ -103,10 +106,6 @@ const FeedPage = () => {
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
   };
-
-  const formattedDate = selectedDate
-    ? dayjs(selectedDate).format('YYYY-MM-DD')
-    : '';
 
   return (
     <Layout>

@@ -28,7 +28,7 @@ class ProblemController(private val problemService: ProblemService) {
 
     @Operation(
         summary = "로그인된 유저가 해결한 문제 목록 조회",
-        description = "로그인된 유저가 특정 달에 해결한 문제 목록을 조회한다."
+        description = "로그인된 유저가 해결한 문제 목록을 특정 일자 단위로 조회한다."
     )
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "로그인된 유저의 문제 목록 조회"),
@@ -42,18 +42,17 @@ class ProblemController(private val problemService: ProblemService) {
         @Schema(description = "조회 단위", required = true, implementation = DateUnit::class)
         type: DateUnit,
 
-        @Schema(description = "type=day - 특정 일의 해결한 문제 목록을 조회", example = "2024-05-28")
+        @Schema(description = "type=DAY - 특정 일의 해결한 문제 목록을 조회", example = "2024-05-28")
         date: LocalDate?,
 
-        @Schema(description = "type=month - 특정 달의 해결한 문제 목록을 조회", example = "2024-05",
-            type = "String",
-            format = "YYYY-MM")
+        @Schema(description = "type=MONTH - 특정 달의 해결한 문제 목록을 조회", example = "2024-05",
+            type = "String", format = "YYYY-MM")
         yearMonth: YearMonth?,
 
-        @Schema(description = "type=range - 특정 범위의 날짜 동안 해결한 문제 목록을 조회(시작 날짜)", example = "2024-05-28")
+        @Schema(description = "type=RANGE - 특정 범위의 날짜 동안 해결한 문제 목록을 조회(시작 날짜)", example = "2024-05-28")
         startDate: LocalDate?,
 
-        @Schema(description = "type=range - 특정 범위의 날짜 동안 해결한 문제 목록을 조회(종료 날짜)", example = "2024-05-30")
+        @Schema(description = "type=RANGE - 특정 범위의 날짜 동안 해결한 문제 목록을 조회(종료 날짜)", example = "2024-05-30")
         endDate: LocalDate?,
 
         authentication: Authentication

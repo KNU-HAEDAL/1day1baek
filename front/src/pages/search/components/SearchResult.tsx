@@ -9,7 +9,7 @@ import styled from '@emotion/styled';
 
 const SearchResultLayout = styled.div`
   width: 100%;
-  height: 40px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -23,7 +23,7 @@ const LoginRedirectPage = () => {
 
     setIsAccessToken(localStorage.getItem('aId') !== null);
     navigate('/');
-    toast.success('환영합니다! 김규회님!');
+    toast.success('환영합니다! 좋은 하루되세요!');
   }, [searchParams, navigate, setIsAccessToken]);
 
   return <></>;

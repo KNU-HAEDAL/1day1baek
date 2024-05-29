@@ -45,6 +45,7 @@ module.exports = {
       },
     ],
 
+    '@typescript-eslint/naming-convention': ' off',
     '@typescript-eslint/no-floating-promises': 'off',
     // 유효한 aria-* 속성만 사용
     'jsx-a11y/aria-props': 'warn',

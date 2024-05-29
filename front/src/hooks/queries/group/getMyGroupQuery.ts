@@ -1,12 +1,13 @@
-import { getGroups } from '@services/search/getGroups';
+import { getMyGroup } from '@services/group/getMyGroups';
 
 import { useQuery } from '@tanstack/react-query';
 
-export const useGroups = () => {
+export const useMyGroupData = () => {
   const { data, isPending, isError, error, refetch } = useQuery({
-    queryKey: ['users-groups'],
-    queryFn: getGroups,
+    queryKey: ['users-group'],
+    queryFn: getMyGroup,
     refetchOnMount: false,
+    refetchOnWindowFocus: true,
   });
 
   return { data, isPending, isError, error, refetch };

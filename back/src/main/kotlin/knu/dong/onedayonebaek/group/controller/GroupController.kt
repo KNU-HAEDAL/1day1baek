@@ -42,7 +42,7 @@ class GroupController(
         description = "모든 그룹을 조회한다."
     )
     @GetMapping
-    fun getGroups() = groupService.getGroups()
+    fun getGroups(authentication: Authentication) = groupService.getGroups(authentication.principal as User)
 
     @Operation(
         summary = "스터디 그룹 상세 조회",

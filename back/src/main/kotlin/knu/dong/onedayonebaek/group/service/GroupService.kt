@@ -31,11 +31,15 @@ class GroupService (
     private val problemRepository: ProblemRepository,
     private val passwordEncoder: PasswordEncoder
 ){
-    fun getGroups(): List<GroupOfListDto> = groupRepository.findAll().map { it.toGroupOfListDto() }
+    fun getGroups(user: User): List<GroupOfListDto> {
+        val userGroupIds = containGroupRepository.findAllByUser(user).map { it.group.id }
+
+        return groupRepository.findAll().map { it.toGroupOfListDto(isMember = (it.id in userGroupIds)) }
+    }
 
 
     fun getGroupsOfUser(user: User): List<GroupOfListDto> =
-        containGroupRepository.findAllByUser(user).map { it.group.toGroupOfListDto() }
+        containGroupRepository.findAllByUser(user).map { it.group.toGroupOfListDto(isMember = true) }
 
     fun getGroupDetail(user: User, groupId: Long): GroupDetailDto {
         val group = groupRepository.findById(groupId).orElseThrow{ NotFoundException(message = "해당 그룹이 없습니다.") }

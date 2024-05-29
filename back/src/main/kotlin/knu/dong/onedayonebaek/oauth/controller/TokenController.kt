@@ -27,7 +27,7 @@ class TokenController(private val tokenService: TokenService) {
     @ApiResponses(
         ApiResponse(
             responseCode = "200",
-            description = "Access Token 및 Refresh Token 재발급",
+            description = "재발급된 Access Token 및 Refresh Token",
             content = [Content(schema = Schema(implementation = Token::class))]
         ),
         ApiResponse(

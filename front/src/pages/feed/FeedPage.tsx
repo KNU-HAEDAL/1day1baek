@@ -2,55 +2,62 @@ import 'react-calendar/dist/Calendar.css';
 
 import dayjs from 'dayjs';
 
+import Text from '@components/typography/Text';
+
 import { StyleCalendar } from '@pages/feed/components/Calendar';
 import ProblemList from '@pages/feed/components/ProblemList';
 import Profile from '@pages/feed/components/Profile';
 
-import { useFeedStore } from '@stores/useFeedStore';
+import { useProblem } from '@hooks/queries/feed/getProblems';
 
-import { Layout, DisplayLayout } from '@styles/Layout';
+import { useFeedStore } from '@stores/useFeedStore';
+import { useTokenStore } from '@stores/useTokenStore';
+
+import { IProblem } from '@interfaces/ProblemInterface';
+
+import { Layout, DisplayLayout, LoginLayout } from '@styles/Layout';
 
 import styled from '@emotion/styled';
 import 'dayjs/locale/ko';
 
-interface IProblem {
-  date: string;
-  problem: string;
-  difficulty: string;
-}
-
-const problemRecords: IProblem[] = [
-  {
-    date: '2024-05-20',
-    problem: '토마토',
-    difficulty: 'gold4',
-  },
-  {
-    date: '2024-05-20',
-    problem: '사과',
-    difficulty: 'gold2',
-  },
-  {
-    date: '2024-05-20',
-    problem: '감자',
-    difficulty: 'gold4',
-  },
-  {
-    date: '2024-05-20',
-    problem: '감자',
-    difficulty: 'gold4',
-  },
-  {
-    date: '2024-05-20',
-    problem: '감자',
-    difficulty: 'gold4',
-  },
-  {
-    date: '2024-05-20',
-    problem: '감자',
-    difficulty: 'gold4',
-  },
-];
+// const problemRecords: IProblem[] = [
+//   {
+//     solvedDate: '2024-05-20',
+//     commitUrl: 'https://github.com/gidskql6671',
+//     title: '토마토',
+//     rank: 'gold4',
+//   },
+//   {
+//     solvedDate: '2024-05-20',
+//     commitUrl: 'https://github.com/gidskql6671',
+//     title: '사과',
+//     rank: 'gold2',
+//   },
+//   {
+//     solvedDate: '2024-05-20',
+//     commitUrl: 'https://github.com/gidskql6671',
+//     title: '감자',
+//     rank: 'gold4',
+//   },
+//   {
+//     solvedDate: '2024-05-20',
+//     commitUrl: 'https://github.com/gidskql6671',
+//     title: '감자',
+//     rank: 'gold4',
+//   },
+//   {
+//     solvedDate: '2024-05-20',
+//     commitUrl: 'https://github.com/gidskql6671',
+//     title: '감자',
+//     rank: 'gold4',
+//   },
+//   {
+//     solvedDate: '2024-05-20',
+//     commitUrl: 'https://github.com/gidskql6671',
+//     title: '감자',
+//     rank: 'gold4',
+//   },
+// ];
 
 const FeedLayout = styled.div`
   margin-top: 62px;
@@ -81,7 +88,16 @@ const ProfileWrapper = styled.div`
 `;
 
 const FeedPage = () => {
+  const { isAccessToken } = useTokenStore();
   const { selectedDate, setSelectedDate } = useFeedStore();
+  const formattedDate = selectedDate
+    ? dayjs(selectedDate).format('YYYY-MM-DD')
+    : '';
+  const {
+    data: problemData,
+    isPending: problemPending,
+    isError: problemError,
+  } = useProblem(formattedDate);
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const formatDay = (_locale: string | undefined, date: Date) =>
@@ -91,42 +107,61 @@ const FeedPage = () => {
     setSelectedDate(date);
   };
 
-  const formattedDate = selectedDate
-    ? dayjs(selectedDate).format('YYYY-MM-DD')
-    : '';
-
   return (
     <Layout>
       <DisplayLayout>
-        <FeedLayout>
-          <CalendarLayout>
-            <ProfileWrapper>
-              <Profile />
-            </ProfileWrapper>
-            <StyleCalendar
-              formatDay={formatDay}
-              calendarType='iso8601'
-              onClickDay={handleDateClick}
-              tileContent={({ date, view }) =>
-                view === 'month' &&
-                problemRecords.find(
-                  (problem) => problem.date === dayjs(date).format('YYYY-MM-DD')
-                ) ? (
-                  <div className='react-calendar__tile--dot'></div>
-                ) : null
-              }
-            />
-          </CalendarLayout>
-          {selectedDate &&
-          problemRecords.find((problem) => problem.date === formattedDate) ? (
+        {isAccessToken ? (
+          <FeedLayout>
+            {' '}
+            <CalendarLayout>
+              <ProfileWrapper>
+                <Profile />
+              </ProfileWrapper>
+              <StyleCalendar
+                formatDay={formatDay}
+                calendarType='iso8601'
+                onClickDay={handleDateClick}
+                tileContent={({ date, view }) =>
+                  view === 'month' &&
+                  problemData &&
+                  problemData.length > 0 &&
+                  problemData.some(
+                    (problem: IProblem) =>
+                      problem.solvedDate === dayjs(date).format('YYYY-MM-DD')
+                  ) ? (
+                    <div className='react-calendar__tile--dot'></div>
+                  ) : null
+                }
+              />
+            </CalendarLayout>
+            {/* {selectedDate &&
+          problemRecords.find(
+            (problem) => problem.solvedDate === formattedDate
+          ) ? (
             <ProblemList
               problems={problemRecords}
               formattedDate={formattedDate}
             />
           ) : (
             <div style={{ width: '470px' }} />
-          )}
-        </FeedLayout>
+          )} */}
+            {selectedDate &&
+              problemData &&
+              !problemPending &&
+              !problemError && (
+                <ProblemList
+                  problems={problemData}
+                  formattedDate={formattedDate}
+                />
+              )}
+          </FeedLayout>
+        ) : (
+          <LoginLayout>
+            <Text size='var(--size-lg)' weight='700'>
+              환영합니다! Guest님! 로그인 후 이용해주세요.
+            </Text>
+          </LoginLayout>
+        )}
       </DisplayLayout>
     </Layout>
   );

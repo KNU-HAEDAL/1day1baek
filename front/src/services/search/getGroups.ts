@@ -7,7 +7,7 @@ export const getGroups = async () => {
     const response = await instance.get(`${BASE_URI}/groups`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching groups:', error);
+    console.error('Error fetching groups Try Again:', error);
     throw error;
   }
 };

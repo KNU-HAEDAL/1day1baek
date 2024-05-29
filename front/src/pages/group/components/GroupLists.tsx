@@ -2,6 +2,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { DefaultButton } from '@components/button/DefaultButton';
 
+import { useMyGroupData } from '@hooks/queries/group/getMyGroupQuery';
+import { postLeaveMyGroupQuery } from '@hooks/queries/group/postLeaveMyGroup';
+
+import { IGroupProps } from '@interfaces/GroupInterface';
+
 import styled from '@emotion/styled';
 
 const MyGroupLists = [
@@ -83,31 +88,44 @@ const GoButton = styled(DefaultButton)`
 
 const GroupLists = () => {
   const navigate = useNavigate();
-
-  const onClickLeave = () => {
-    confirm('정말로 나가시겠습니까?');
-  };
+  const { data: MyGroupLists, isPending, isError, error } = useMyGroupData();
+  const { mutate: postLeaveMyGroup } = postLeaveMyGroupQuery();
 
   return (
     <>
-      {MyGroupLists.map((group) => (
-        <GroupContainer key={group.id}>
-          <GroupTypeLayout>
-            <GroupName>{group.name}</GroupName>
-            <GroupType>{group.isPrivate ? 'Private' : 'Public'}</GroupType>
-          </GroupTypeLayout>
-          <GroupButtonLayout>
-            <GoButton
-              onClick={() => {
-                navigate(`/group/${group.id}`);
-              }}
-            >
-              이동하기
-            </GoButton>
-            <GoButton onClick={onClickLeave}>나가기</GoButton>
-          </GroupButtonLayout>
-        </GroupContainer>
-      ))}
+      {isPending ? (
+        <div>Loading...</div>
+      ) : isError ? (
+        <div>Error: {error?.message}</div>
+      ) : (
+        MyGroupLists.map((group: IGroupProps) => (
+          <GroupContainer key={group.id}>
+            <GroupTypeLayout>
+              <GroupName>{group.name}</GroupName>
+              <GroupType>{group.isPrivate ? 'Private' : 'Public'}</GroupType>
+            </GroupTypeLayout>
+            <GroupButtonLayout>
+              <GoButton
+                onClick={() => {
+                  navigate(`/group/${group.id}`);
+                }}
+              >
+                이동하기
+              </GoButton>
+              <GoButton
+                onClick={() => {
+                  const isConfirmed = window.confirm('정말로 나가시겠습니까?');
+                  if (isConfirmed) {
+                    postLeaveMyGroup(group.id);
+                  }
+                }}
+              >
+                나가기
+              </GoButton>
+            </GroupButtonLayout>
+          </GroupContainer>
+        ))
+      )}
     </>
   );
 };

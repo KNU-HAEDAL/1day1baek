@@ -1,5 +1,9 @@
 import { useForm } from 'react-hook-form';
 
+import { useMyGroupData } from '@hooks/queries/group/getMyGroupQuery';
+import { useCreateGroup } from '@hooks/queries/group/postCreateGroupQuery';
+import { useGroups } from '@hooks/queries/search/getGroupsQuery';
+
 import {
   CreateGroupSchema,
   CreateGroupSchemaType,
@@ -92,13 +96,21 @@ const CreateModal = ({ closeModal }: { closeModal: () => void }) => {
   } = useForm<CreateGroupSchemaType>({
     resolver: zodResolver(CreateGroupSchema),
   });
+  const { mutate: createGroup } = useCreateGroup();
+  const { refetch: refreshGroupData } = useMyGroupData();
+  const { refetch: refreshGroupsData } = useGroups();
+
   const onSubmit = (data: ICreateGroupModalProps) => {
     const isConfirmed = window.confirm('회원가입을 완료하시겠습니까?');
     if (isConfirmed) {
-      console.log(data);
+      createGroup(data, {
+        onSuccess: () => {
+          closeModal();
+          refreshGroupData();
+          refreshGroupsData();
+        },
+      });
     }
-    // console.log(data);
-    closeModal();
   };
 
   return (
@@ -165,7 +177,7 @@ const CreateModal = ({ closeModal }: { closeModal: () => void }) => {
             )}
           />
         </FormGroup>
-        <Button type='submit'>Save</Button>
+        <Button type='submit'>그룹 만들기</Button>
       </form>
     </ModalContainer>
   );

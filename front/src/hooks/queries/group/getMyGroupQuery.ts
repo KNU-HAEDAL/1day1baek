@@ -8,6 +8,7 @@ export const useMyGroupData = () => {
     queryFn: getMyGroup,
     refetchOnMount: false,
     refetchOnWindowFocus: true,
+    refetchOnReconnect: false,
   });
 
   return { data, isPending, isError, error, refetch };

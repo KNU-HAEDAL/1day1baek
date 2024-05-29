@@ -6,7 +6,9 @@ export const useProblem = (date: string | null) => {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['userProblems', date],
     queryFn: () => (date ? getUserProblems(date) : Promise.resolve([])),
-    refetchOnMount: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   return { data, isPending, isError, error };

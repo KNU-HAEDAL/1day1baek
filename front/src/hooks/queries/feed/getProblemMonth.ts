@@ -7,7 +7,9 @@ export const useProblemMonth = (yearMonth: string | null) => {
     queryKey: ['userProblemsMonth', yearMonth],
     queryFn: () =>
       yearMonth ? getUserProblemMonth(yearMonth) : Promise.resolve([]),
-    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    refetchOnReconnect: false,
   });
 
   return { data, isPending, isError, error };

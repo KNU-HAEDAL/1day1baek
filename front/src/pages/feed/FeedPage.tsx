@@ -140,26 +140,14 @@ const FeedPage = () => {
                 }
               />
             </CalendarLayout>
-            {/* {selectedDate &&
-          problemRecords.find(
-            (problem) => problem.solvedDate === formattedDate
-          ) ? (
-            <ProblemList
-              problems={problemRecords}
-              formattedDate={formattedDate}
-            />
-          ) : (
-            <div style={{ width: '470px' }} />
-          )} */}
-            {selectedDate &&
-              problemData &&
-              !problemPending &&
-              !problemError && (
-                <ProblemList
-                  problems={problemData}
-                  formattedDate={formattedDate}
-                />
-              )}
+            {selectedDate && problemData && !problemPending && !problemError ? (
+              <ProblemList
+                problems={problemData}
+                formattedDate={formattedDate}
+              />
+            ) : (
+              <div style={{ width: 470 }}></div>
+            )}
           </FeedLayout>
         ) : (
           <LoginLayout>

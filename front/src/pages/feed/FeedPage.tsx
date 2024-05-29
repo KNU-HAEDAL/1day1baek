@@ -97,7 +97,7 @@ const FeedPage = () => {
 
   const formattedMonth = selectedDate
     ? dayjs(selectedDate).format('YYYY-MM')
-    : '';
+    : dayjs().format('YYYY-MM');
   const {
     data: problemData,
     isPending: problemPending,
@@ -105,7 +105,6 @@ const FeedPage = () => {
   } = useProblem(formattedDate);
   const { data: problemDataMonth } = useProblemMonth(formattedMonth);
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const formatDay = (_locale: string | undefined, date: Date) =>
     dayjs(date).format('D');
 

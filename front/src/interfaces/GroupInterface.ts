@@ -8,7 +8,7 @@ export interface IGroupProps {
 export interface ICreateGroupModalProps {
   name: string;
   isPrivate: boolean;
-  password: string;
+  password?: string;
   goalSolveCount: number;
   fine: number;
 }

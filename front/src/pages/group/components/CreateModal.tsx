@@ -93,15 +93,19 @@ const CreateModal = ({ closeModal }: { closeModal: () => void }) => {
     register,
     formState: { errors },
     handleSubmit,
+    watch,
   } = useForm<CreateGroupSchemaType>({
     resolver: zodResolver(CreateGroupSchema),
   });
+
+  const watchIsPrivate = watch('isPrivate', false);
+
   const { mutate: createGroup } = useCreateGroup();
   const { refetch: refreshGroupData } = useMyGroupData();
   const { refetch: refreshGroupsData } = useGroups();
 
   const onSubmit = (data: ICreateGroupModalProps) => {
-    const isConfirmed = window.confirm('회원가입을 완료하시겠습니까?');
+    const isConfirmed = window.confirm('그룹 생성을 완료하시겠습니까?');
     if (isConfirmed) {
       createGroup(data, {
         onSuccess: () => {
@@ -139,14 +143,23 @@ const CreateModal = ({ closeModal }: { closeModal: () => void }) => {
             Private
           </CheckboxLabel>
         </FormGroup>
-        <FormGroup>
-          <InputLabel>Password</InputLabel>
-          <InputField
-            type='password'
-            placeholder='password를 입력해주세요'
-            {...register('password')}
-          />
-        </FormGroup>
+        {watchIsPrivate && (
+          <FormGroup>
+            <InputLabel>Password</InputLabel>
+            <InputField
+              type='password'
+              placeholder='password를 입력해주세요'
+              {...register('password')}
+            />
+            <ErrorMessage
+              errors={errors}
+              name='password'
+              render={({ message }: { message: string }) => (
+                <Error role='alert'>{message}</Error>
+              )}
+            />
+          </FormGroup>
+        )}
         <FormGroup>
           <InputLabel>Goal Solve Count</InputLabel>
           <InputField

@@ -83,7 +83,7 @@ class HolidayController(private val holidayService: HolidayService) {
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "추가 성공"),
         ApiResponse(
-            responseCode = "403", description = "그룹 관리자가 아님",
+            responseCode = "403", description = "그룹장이 아님",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(
@@ -109,7 +109,7 @@ class HolidayController(private val holidayService: HolidayService) {
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "추가 성공"),
         ApiResponse(
-            responseCode = "403", description = "그룹 관리자가 아님",
+            responseCode = "403", description = "그룹장이 아님",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(
@@ -138,7 +138,7 @@ class HolidayController(private val holidayService: HolidayService) {
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "추가 성공"),
         ApiResponse(
-            responseCode = "403", description = "그룹 관리자가 아님",
+            responseCode = "403", description = "그룹장이 아님",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(
@@ -166,7 +166,7 @@ class HolidayController(private val holidayService: HolidayService) {
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "삭제 성공"),
         ApiResponse(
-            responseCode = "403", description = "그룹 관리자가 아님",
+            responseCode = "403", description = "그룹장이 아님",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(
@@ -192,7 +192,7 @@ class HolidayController(private val holidayService: HolidayService) {
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "삭제 성공"),
         ApiResponse(
-            responseCode = "403", description = "그룹 관리자가 아님",
+            responseCode = "403", description = "그룹장이 아님",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(
@@ -220,7 +220,7 @@ class HolidayController(private val holidayService: HolidayService) {
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "삭제 성공"),
         ApiResponse(
-            responseCode = "403", description = "그룹 관리자가 아님",
+            responseCode = "403", description = "그룹장이 아님",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(

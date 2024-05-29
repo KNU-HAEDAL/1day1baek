@@ -8,7 +8,7 @@ export const useCreateGroup = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: postCreateGroup,
     onSuccess: () => {
-      console.log('Query invalidated');
+      // console.log('Query invalidated');
       queryClient.invalidateQueries({ queryKey: ['users-group'] });
     },
   });

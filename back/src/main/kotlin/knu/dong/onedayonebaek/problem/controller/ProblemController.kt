@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import knu.dong.onedayonebaek.common.dto.DateUnit
 import knu.dong.onedayonebaek.common.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.common.exception.response.BadRequestResponse
+import knu.dong.onedayonebaek.problem.dto.GetProblemCountOfDayResponse
 import knu.dong.onedayonebaek.problem.dto.ProblemDto
 import knu.dong.onedayonebaek.problem.service.ProblemService
 import knu.dong.onedayonebaek.user.domain.User
@@ -100,9 +101,9 @@ class ProblemController(private val problemService: ProblemService) {
         @RequestParam(required = true)
         date: LocalDate,
         authentication: Authentication
-    ): Int {
+    ): GetProblemCountOfDayResponse {
         val user = authentication.principal as User
 
-        return problemService.getProblems(user, date).size
+        return GetProblemCountOfDayResponse(problemService.getProblems(user, date).size, date)
     }
 }

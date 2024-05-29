@@ -31,7 +31,7 @@ class ProblemController(private val problemService: ProblemService) {
         description = "로그인된 유저가 해결한 문제 목록을 특정 일자 단위로 조회한다."
     )
     @ApiResponses(
-        ApiResponse(responseCode = "200", description = "로그인된 유저의 문제 목록 조회"),
+        ApiResponse(responseCode = "200", description = "로그인된 유저가 해결한 문제 목록"),
         ApiResponse(
             responseCode = "400", description = "잘못된 Request Parameter",
             content = [Content(schema = Schema(implementation = BadRequestResponse::class))],
@@ -84,7 +84,7 @@ class ProblemController(private val problemService: ProblemService) {
         description = "로그인된 유저의 특정 일자에 해결한 문제 개수를 조회한다."
     )
     @ApiResponses(
-        ApiResponse(responseCode = "200", description = "로그인된 유저의 특정 일자에 해당하는 해결한 문제 개수"),
+        ApiResponse(responseCode = "200", description = "로그인된 유저가 특정 일자에 해결한 문제 개수"),
         ApiResponse(
             responseCode = "400", description = "잘못된 Request Parameter",
             content = [Content(schema = Schema(implementation = BadRequestResponse::class))],

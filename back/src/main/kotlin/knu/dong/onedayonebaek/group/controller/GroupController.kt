@@ -208,11 +208,12 @@ class GroupController(
             content = [Content(schema = Schema(implementation = NotFoundResponse::class))]
         ),
         ApiResponse(
-            responseCode = "409", description = "- 사용자가 그룹 장임\n- 해당 스터디 그룹에 속해있지 않음",
+            responseCode = "409", description = "- 그룹장은 나갈 수 없음\n- 해당 스터디 그룹에 속해있지 않음",
             content = [Content(
+                schema = Schema(implementation = ConflictResponse::class),
                 examples = [
                     ExampleObject(
-                        name = "비밀 그룹 비밀번호 불일치",
+                        name = "그룹장은 나갈 수 없음",
                         value = "{\"code\": \"not_allowed_leave_group_owner\", \"message\":\"그룹 장은 나갈 수 없습니다.\"}"
                     ), ExampleObject(
                         name = "이미 가입된 그룹",
@@ -240,15 +241,15 @@ class GroupController(
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(
-            responseCode = "404", description = "존재하지 않는 스터디 그룹",
+            responseCode = "404", description = "- 존재하지 않는 스터디 그룹\n- 존재하지 않는 유저",
             content = [Content(
                 schema = Schema(implementation = NotFoundResponse::class),
                 examples = [
                     ExampleObject(
-                        name = "내보내려는 사용자가 없음",
+                        name = "그룹이 없음",
                         value = "{\"code\": \"not_found_group\", \"message\":\"해당 그룹이 없습니다.\"}"
                     ), ExampleObject(
-                        name = "그룹이 없음",
+                        name = "내보내려는 사용자가 없음",
                         value = "{\"code\": \"not_found_user\", \"message\":\"해당 유저가 없습니다.\"}"
                     )
                 ],
@@ -275,7 +276,7 @@ class GroupController(
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "스터디 그룹원들이 해결한 문제 목록"),
         ApiResponse(
-            responseCode = "403", description = "속해있지 않은 스터디 그룹",
+            responseCode = "403", description = "속해있지 않은 비밀 스터디 그룹",
             content = [Content(schema = Schema(implementation = ForbiddenResponse::class))],
         ),
         ApiResponse(

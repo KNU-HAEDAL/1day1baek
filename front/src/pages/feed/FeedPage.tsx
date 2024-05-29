@@ -17,6 +17,7 @@ import { IProblem } from '@interfaces/ProblemInterface';
 
 import { Layout, DisplayLayout, LoginLayout } from '@styles/Layout';
 
+import { useProblemMonth } from '@/hooks/queries/feed/getProblemMonth';
 import styled from '@emotion/styled';
 import 'dayjs/locale/ko';
 
@@ -93,11 +94,16 @@ const FeedPage = () => {
   const formattedDate = selectedDate
     ? dayjs(selectedDate).format('YYYY-MM-DD')
     : '';
+
+  const formattedMonth = selectedDate
+    ? dayjs(selectedDate).format('YYYY-MM')
+    : '';
   const {
     data: problemData,
     isPending: problemPending,
     isError: problemError,
   } = useProblem(formattedDate);
+  const { data: problemDataMonth } = useProblemMonth(formattedMonth);
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const formatDay = (_locale: string | undefined, date: Date) =>
@@ -123,9 +129,9 @@ const FeedPage = () => {
                 onClickDay={handleDateClick}
                 tileContent={({ date, view }) =>
                   view === 'month' &&
-                  problemData &&
-                  problemData.length > 0 &&
-                  problemData.some(
+                  problemDataMonth &&
+                  problemDataMonth.length > 0 &&
+                  problemDataMonth.some(
                     (problem: IProblem) =>
                       problem.solvedDate === dayjs(date).format('YYYY-MM-DD')
                   ) ? (

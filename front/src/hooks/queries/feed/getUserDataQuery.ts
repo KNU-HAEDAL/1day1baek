@@ -6,9 +6,6 @@ export const useUserData = () => {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['users'],
     queryFn: getUserData,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
   });
 
   return { data, isPending, isError, error };

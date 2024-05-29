@@ -3,14 +3,11 @@ import { getUserProblemMonth } from '@services/feed/getProblemMonth';
 import { useQuery } from '@tanstack/react-query';
 
 export const useProblemMonth = (yearMonth: string | null) => {
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ['userProblemsMonth', yearMonth],
     queryFn: () =>
       yearMonth ? getUserProblemMonth(yearMonth) : Promise.resolve([]),
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    refetchOnReconnect: false,
   });
 
-  return { data, isPending, isError, error };
+  return { data, isPending, isError, error, refetch };
 };

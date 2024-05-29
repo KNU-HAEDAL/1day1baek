@@ -8,6 +8,7 @@ const sizeLg = '1.25rem'; // 20px
 const sizeMd = '1rem'; // 16px
 const sizeSm = '0.875rem'; // 14px
 const sizeXs = '0.75rem'; // 12px
+const sizeXxs = '0.625rem'; // 10px
 
 //color 정의
 const colorWhite = '#FFFFFF';
@@ -33,6 +34,7 @@ export const GlobalStyle = css`
     --size-md: ${sizeMd};
     --size-sm: ${sizeSm};
     --size-xs: ${sizeXs};
+    --size-xxs: ${sizeXxs};
 
     --color-white: ${colorWhite};
     --color-black: ${colorBlack};
@@ -49,6 +51,7 @@ export const GlobalStyle = css`
 
   * {
     box-sizing: border-box;
+    transition: all 0.3s ease-out;
   }
 
   body {

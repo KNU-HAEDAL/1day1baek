@@ -6,12 +6,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import knu.dong.onedayonebaek.user.domain.User
 import knu.dong.onedayonebaek.common.dto.DateUnit
-import knu.dong.onedayonebaek.problem.dto.ProblemDto
 import knu.dong.onedayonebaek.common.exception.InvalidReqParamException
 import knu.dong.onedayonebaek.common.exception.response.BadRequestResponse
+import knu.dong.onedayonebaek.problem.dto.ProblemDto
 import knu.dong.onedayonebaek.problem.service.ProblemService
+import knu.dong.onedayonebaek.user.domain.User
 import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -97,6 +97,7 @@ class ProblemController(private val problemService: ProblemService) {
             required = true,
             example = "2024-05-25"
         )
+        @RequestParam(required = true)
         date: LocalDate,
         authentication: Authentication
     ): Int {

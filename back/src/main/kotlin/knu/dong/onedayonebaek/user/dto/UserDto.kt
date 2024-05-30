@@ -11,8 +11,11 @@ data class UserDto(
     val name: String,
 
     @Schema(description = "github profile url", nullable = false, example = "https://avatars.githubusercontent.com/u/23000498?v=4")
-    val profileUrl: String
+    val profileUrl: String,
+
+    @Schema(description = "User ID", nullable = false, example = "1")
+    val id: Long? = null
 )
 
-fun UserDto.toEntity() = User(loginId, name, profileUrl)
-fun User.toUserDto() = UserDto(loginId, name, profileUrl)
+fun UserDto.toEntity() = User(loginId = loginId, name = name, profileUrl = profileUrl)
+fun User.toUserDto() = UserDto(loginId = loginId, name = name, profileUrl = profileUrl, id = id)

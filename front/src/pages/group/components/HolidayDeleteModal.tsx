@@ -78,7 +78,7 @@ const HolidayDeleteModal = ({ closeModal }: { closeModal: () => void }) => {
           />
         </FormGroup>
         <Button type='submit' disabled={isPending}>
-          {isPending ? '추가 중...' : '휴일 추가'}
+          {isPending ? '추가 중...' : '휴일 삭제'}
         </Button>
         {isError && (
           <Error role='alert'>에러가 발생했습니다: {error?.message}</Error>

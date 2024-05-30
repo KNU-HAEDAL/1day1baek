@@ -8,6 +8,7 @@ import java.time.LocalDate
 interface HolidayRepository: JpaRepository<Holiday, Long> {
 
     fun findAllByGroupAndDateBetween(group: Group, start: LocalDate, end: LocalDate): List<Holiday>
+    fun findAllByGroupAndDateBetweenOrderByDate(group: Group, start: LocalDate, end: LocalDate): List<Holiday>
     fun existsByGroupAndDate(group: Group, date: LocalDate): Boolean
     fun deleteByGroupAndDateIn(group: Group, date: List<LocalDate>)
 }

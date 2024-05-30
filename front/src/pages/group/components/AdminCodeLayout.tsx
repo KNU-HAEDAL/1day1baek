@@ -40,7 +40,7 @@ const MakeButton = styled(DefaultButton)`
   font-size: var(--size-sm);
   border-radius: 20px;
   padding: 0;
-  margin: 10px 0;
+  margin: 10px 4px 10px 0;
 
   &:hover {
     color: var(--color-black);

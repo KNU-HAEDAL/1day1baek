@@ -1,15 +1,14 @@
 import { queryClient } from '@hooks/queries/Http';
 
-import { postCreateGroup } from '@services/group/postCreateGroup';
+import { postInviteGroup } from '@services/header/postInviteGroup';
 
 import { useMutation } from '@tanstack/react-query';
 
-export const useCreateGroup = () => {
+export const useInviteGroup = () => {
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: postCreateGroup,
+    mutationFn: postInviteGroup,
     onSuccess: () => {
-      // console.log('Query invalidated');
-      queryClient.invalidateQueries({ queryKey: ['users-group'] });
+      queryClient.invalidateQueries({ queryKey: ['leave-group'] });
     },
   });
 

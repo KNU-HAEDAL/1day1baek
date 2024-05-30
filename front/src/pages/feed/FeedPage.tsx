@@ -93,7 +93,7 @@ const FeedPage = () => {
   const { selectedDate, setSelectedDate } = useFeedStore();
   const formattedDate = selectedDate
     ? dayjs(selectedDate).format('YYYY-MM-DD')
-    : '';
+    : dayjs().format('YYYY-MM-DD');
 
   const formattedMonth = selectedDate
     ? dayjs(selectedDate).format('YYYY-MM')

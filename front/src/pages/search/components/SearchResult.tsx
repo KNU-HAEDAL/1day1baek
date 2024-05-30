@@ -1,7 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 import { DefaultButton } from '@components/button/DefaultButton';
 import Text from '@components/typography/Text';
 
+import { useMyGroupData } from '@hooks/queries/group/getMyGroupQuery';
 import { useGroups } from '@hooks/queries/search/getGroupsQuery';
+import { useJoinGroupQuery } from '@hooks/queries/search/postJoinGroupQuery';
 
 import { IGroupProps } from '@interfaces/GroupInterface';
 
@@ -25,6 +29,11 @@ const PButton = styled(DefaultButton)`
   padding: 0;
   margin: 0;
   &:hover {
+    color: var(--color-black);
+    background-color: var(--color-byellow);
+  }
+
+  &:focus {
     color: var(--color-black);
     background-color: var(--color-byellow);
   }
@@ -64,6 +73,9 @@ const GroupTypeLayout = styled.div`
 
 const SearchResult = () => {
   const { data, isPending, isError, error } = useGroups();
+  const { refetch: refreshGroupData } = useMyGroupData();
+  const { mutate: joinGroup } = useJoinGroupQuery();
+  const navigate = useNavigate();
 
   if (isPending) {
     return <InputResultLayout>로딩 중...</InputResultLayout>;
@@ -82,8 +94,6 @@ const SearchResult = () => {
   }
 
   const filteredGroups = data.filter((group: IGroupProps) => !group.isMember);
-
-  const onClickNav = () => {};
 
   return (
     <InputResultLayout>
@@ -104,7 +114,39 @@ const SearchResult = () => {
               </Text>
               <GroupType>{group.isPrivate ? 'Private' : 'Public'}</GroupType>
             </GroupTypeLayout>
-            <PButton onClick={onClickNav}>참여하기</PButton>
+            <PButton
+              onClick={() => {
+                if (group.isPrivate) {
+                  const password = prompt('비밀번호를 입력해주세요');
+                  if (password) {
+                    joinGroup(
+                      { groupId: group.id.toString(), password },
+                      {
+                        onSuccess: () => {
+                          alert('참여하기를 완료하였습니다.');
+                          refreshGroupData();
+                          navigate('/group');
+                        },
+                      }
+                    );
+                  }
+                } else {
+                  console.log(group.id);
+                  joinGroup(
+                    { groupId: group.id.toString(), password: '' },
+                    {
+                      onSuccess: () => {
+                        alert('참여하기를 완료하였습니다.');
+                        refreshGroupData();
+                        navigate('/group');
+                      },
+                    }
+                  );
+                }
+              }}
+            >
+              참여하기
+            </PButton>
           </SearchResultLayout>
         ))
       )}

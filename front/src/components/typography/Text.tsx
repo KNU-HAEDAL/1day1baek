@@ -8,7 +8,7 @@ interface ITextContentProps extends ITextProps {
   children?: ReactNode;
 }
 
-const StyledText = styled.p<ITextProps>`
+const StyledText = styled.div<ITextProps>`
   font-size: ${({ size }) => size || '1rem'};
   font-weight: ${({ weight }) => weight || 'normal'};
   color: ${({ color }) => color || 'inherit'};

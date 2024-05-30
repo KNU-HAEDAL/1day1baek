@@ -88,7 +88,13 @@ const GoButton = styled(DefaultButton)`
 
 const GroupLists = () => {
   const navigate = useNavigate();
-  const { data: MyGroupLists, isPending, isError, error } = useMyGroupData();
+  const {
+    data: MyGroupLists,
+    isPending,
+    isError,
+    error,
+    refetch: refreshGroupData,
+  } = useMyGroupData();
   const { mutate: postLeaveMyGroup } = postLeaveMyGroupQuery();
 
   return (
@@ -116,7 +122,12 @@ const GroupLists = () => {
                 onClick={() => {
                   const isConfirmed = window.confirm('정말로 나가시겠습니까?');
                   if (isConfirmed) {
-                    postLeaveMyGroup(group.id);
+                    postLeaveMyGroup(group.id, {
+                      onSuccess: () => {
+                        alert('그룹 탈퇴를 완료하였습니다.');
+                        refreshGroupData();
+                      },
+                    });
                   }
                 }}
               >

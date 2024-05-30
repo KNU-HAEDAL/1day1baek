@@ -1,4 +1,4 @@
-import { BiBookmark, BiMoney, BiSolidCrown } from 'react-icons/bi';
+import { BiBookmark, BiMoney, BiSolidCrown, BiMailSend } from 'react-icons/bi';
 import { IoIosClose } from 'react-icons/io';
 
 import Text from '@components/typography/Text';
@@ -46,6 +46,11 @@ const StyledBiCrown = styled(BiSolidCrown)`
   color: var(--color-yellow);
 `;
 
+const StyledBiMailSend = styled(BiMailSend)`
+  margin-right: 4px;
+  color: var(--color-blue);
+`;
+
 const ProfileLayout = styled.div`
   height: 100%;
   width: 100%;
@@ -85,10 +90,21 @@ const ListLayout = styled.div`
 `;
 
 const AdminTeamProfile = ({ groupData }: { groupData: ISelectGroupProps }) => {
-  // console.log(groupData);
+  console.log(groupData);
 
   return (
     <TeamLayout>
+      <ExplainLayout>
+        <Text color='var(--color-black)' size='var(--size-md)' weight='700'>
+          Invite Code
+        </Text>
+        <TextLayout>
+          <StyledBiMailSend />
+          <Text color='var(--color-black)' size='var(--size-xs)' weight='500'>
+            {groupData.inviteCode}
+          </Text>
+        </TextLayout>
+      </ExplainLayout>
       <ExplainLayout>
         <Text color='var(--color-black)' size='var(--size-md)' weight='700'>
           Our Team Lead

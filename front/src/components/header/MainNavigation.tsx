@@ -1,10 +1,12 @@
 import toast from 'react-hot-toast';
-import { BiBell, BiLogIn, BiLogOut } from 'react-icons/bi';
+import { BiMailSend, BiLogIn, BiLogOut } from 'react-icons/bi';
 
+import InviteCodeModal from '@components/header/components/InviteCodeModal';
 import LinkText from '@components/typography/LinkText';
 
 import HaedalText from '@assets/HaedalText.png';
 
+import { useInviteModalStore } from '@stores/useInviteModal';
 import { useTokenStore } from '@stores/useTokenStore';
 
 import styled from '@emotion/styled';
@@ -51,6 +53,11 @@ const LogoImg = styled.img`
 
 const MainNavigation = () => {
   const { isAccessToken, setIsAccessToken } = useTokenStore();
+  const { isModalOpen, toggleModal } = useInviteModalStore();
+
+  const changeStateModal = () => {
+    toggleModal();
+  };
 
   const onClickLogout = () => {
     localStorage.removeItem('aId');
@@ -99,7 +106,11 @@ const MainNavigation = () => {
         </MainNavigateList>
         <MainNavigateList>
           <MainNavigateItem>
-            <BiBell size={20} aria-label='notifications' />
+            <BiMailSend
+              size={20}
+              aria-label='notifications'
+              onClick={changeStateModal}
+            />
           </MainNavigateItem>
           {isAccessToken ? (
             <MainNavigateItem>
@@ -118,6 +129,7 @@ const MainNavigation = () => {
           )}
         </MainNavigateList>
       </MainNavigateContainer>
+      {isModalOpen && <InviteCodeModal closeModal={changeStateModal} />}
     </MainNavigateDiv>
   );
 };

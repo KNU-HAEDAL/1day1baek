@@ -1,10 +1,14 @@
 import { BiBookmark, BiMoney, BiSolidCrown, BiMailSend } from 'react-icons/bi';
 import { IoIosClose } from 'react-icons/io';
+import { useParams } from 'react-router-dom';
 
 import Text from '@components/typography/Text';
 
+import { useDeleteKickMem } from '@hooks/queries/group/deleteKickMemQuery';
+
 import { ISelectGroupProps } from '@interfaces/GroupInterface';
 
+import { useSelectGroupData } from '@/hooks/queries/group/getSelectGroupQuery';
 import styled from '@emotion/styled';
 
 const TeamLayout = styled.div`
@@ -89,8 +93,19 @@ const ListLayout = styled.div`
   flex-direction: column;
 `;
 
+const AdminProfileLayout = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+`;
+
 const AdminTeamProfile = ({ groupData }: { groupData: ISelectGroupProps }) => {
   console.log(groupData);
+  const { groupId } = useParams<string>();
+  const { mutate: kickMem } = useDeleteKickMem();
+  const { refetch: refreshData } = useSelectGroupData(groupId);
 
   return (
     <TeamLayout>
@@ -146,23 +161,37 @@ const AdminTeamProfile = ({ groupData }: { groupData: ISelectGroupProps }) => {
           <ListLayout>
             {groupData.users.map((contributor) => (
               <ContributorLayout key={contributor.loginId}>
-                <ProfileImg imgUrl={contributor.profileUrl} />
-                <ProfileTextLayout>
-                  <Text
-                    color='var(--color-black)'
-                    size='var(--size-xs)'
-                    weight='700'
-                  >
-                    {contributor.loginId}
+                <AdminProfileLayout>
+                  <ProfileImg imgUrl={contributor.profileUrl} />
+                  <ProfileTextLayout>
+                    <Text
+                      color='var(--color-black)'
+                      size='var(--size-xs)'
+                      weight='700'
+                    >
+                      {contributor.loginId}
+                    </Text>
+                  </ProfileTextLayout>
+                  <Text color='#333' size='var(--size-xs)' weight='600'>
+                    {contributor.name}
                   </Text>
-                </ProfileTextLayout>
-                <Text color='#333' size='var(--size-xs)' weight='600'>
-                  {contributor.name}
-                </Text>
+                </AdminProfileLayout>
                 <IoIosClose
                   size={24}
                   onClick={() => {
-                    confirm('내보내시겠습니까?');
+                    const isConfirmed =
+                      window.confirm('정말로 추방하시겠습니까?');
+                    if (isConfirmed && typeof groupId === 'string') {
+                      const transformedData = {
+                        groupId: groupId,
+                        targetUserId: contributor.id,
+                      };
+                      kickMem(transformedData, {
+                        onSuccess: () => {
+                          refreshData();
+                        },
+                      });
+                    }
                   }}
                 />
               </ContributorLayout>

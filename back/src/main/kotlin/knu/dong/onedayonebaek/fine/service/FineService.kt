@@ -39,8 +39,6 @@ class FineService(
                 val solvedDates = problemsOfUsers[user.id]!!
                     .groupingBy { it.solvedDate }.eachCount()
 
-                myLogger.error { solvedDates }
-                myLogger.error { targetDates }
                 result[userDto] = targetDates.count {
                     if (solvedDates.containsKey(it)) {
                         solvedDates[it]!! < group.goalSolveCount

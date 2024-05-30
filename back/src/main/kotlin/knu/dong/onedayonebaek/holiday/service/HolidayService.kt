@@ -58,9 +58,7 @@ class HolidayService(
         }
 
         return holidayRepository
-            .findAllByGroupAndDateBetween(group, start, end)
-            .stream()
+            .findAllByGroupAndDateBetweenOrderByDate(group, start, end)
             .map(Holiday::date)
-            .toList()
     }
 }

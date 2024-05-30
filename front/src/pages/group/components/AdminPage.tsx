@@ -1,12 +1,11 @@
 import Text from '@components/typography/Text';
 
-import CodeLayout from '@pages/group/components/CodeLayout';
+import AdminCodeLayout from '@pages/group/components/AdminCodeLayout';
+import AdminTeamProfile from '@pages/group/components/AdminTeamProfile';
 
 import { ISelectGroupProps } from '@interfaces/GroupInterface';
 
 import { TitleLayout, PublicToken, ContentLayout } from '@styles/GroupLayout';
-
-import AdminTeamProfile from './AdminTeamProfile';
 
 const AdminPage = ({ groupData }: { groupData: ISelectGroupProps }) => {
   // console.log(groupData);
@@ -30,7 +29,7 @@ const AdminPage = ({ groupData }: { groupData: ISelectGroupProps }) => {
         </PublicToken>
       </TitleLayout>
       <ContentLayout>
-        <CodeLayout />
+        <AdminCodeLayout />
         <AdminTeamProfile groupData={groupData} />
       </ContentLayout>
     </>

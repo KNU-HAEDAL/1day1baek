@@ -2,10 +2,13 @@ import { useParams } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
+import { DefaultButton } from '@components/button/DefaultButton';
 import Text from '@components/typography/Text';
 
 import { StyleCalendar } from '@pages/feed/components/Calendar';
 import CodeProblemList from '@pages/group/components/CodeProblemList';
+import HolidayDeleteModal from '@pages/group/components/HolidayDeleteModal';
+import HolidayModal from '@pages/group/components/HolidayModal';
 
 import { useFineMonth } from '@hooks/queries/group/getFineMonthQuery';
 import { useGroupProblem } from '@hooks/queries/group/getGroupProblem';
@@ -13,6 +16,7 @@ import { useGroupProblemMonth } from '@hooks/queries/group/getGroupProblemMonthQ
 import { useHolidayMonth } from '@hooks/queries/group/getHolidayMonthQuery';
 
 import { useFeedStore } from '@stores/useFeedStore';
+import { useHolidayModalStore } from '@stores/useHolidayModal';
 
 import {
   IGroupProblemProps,
@@ -25,11 +29,44 @@ import {
   HolidayLayout,
 } from '@styles/GroupCodeLayout';
 
+import styled from '@emotion/styled';
 import 'dayjs/locale/ko';
 
-const CodeLayout = () => {
+const MakeButton = styled(DefaultButton)`
+  width: 90px;
+  height: 30px;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-size: var(--size-sm);
+  border-radius: 20px;
+  padding: 0;
+  margin: 10px 0;
+
+  &:hover {
+    color: var(--color-black);
+    background-color: var(--color-byellow);
+  }
+  &:focus {
+    background-color: var(--color-red);
+    color: var(--color-white);
+  }
+`;
+
+const AdminCodeLayout = () => {
   const { selectedDate, setSelectedDate } = useFeedStore();
+  const { isModalOpen, isDeleteModalOpen, toggleModal, toggleDeleteModal } =
+    useHolidayModalStore();
   const { groupId } = useParams();
+
+  // console.log(groupHoliday);
+
+  const changeStateModal = () => {
+    toggleModal();
+  };
+
+  const changeStateDeleteModal = () => {
+    toggleDeleteModal();
+  };
 
   const formattedMonth = selectedDate
     ? dayjs(selectedDate).format('YYYY-MM')
@@ -39,13 +76,14 @@ const CodeLayout = () => {
     ? dayjs(selectedDate).format('YYYY-MM-DD')
     : dayjs().format('YYYY-MM-DD');
 
+  const { data: groupHoliday } = useHolidayMonth(groupId, formattedMonth);
+  const { data: groupFine } = useFineMonth(groupId, formattedMonth);
+
   const { data: groupProblemMonth } = useGroupProblemMonth(
     groupId,
     formattedMonth
   );
   const { data: groupProblem } = useGroupProblem(groupId, formattedDate);
-  const { data: groupHoliday } = useHolidayMonth(groupId, formattedMonth);
-  const { data: groupFine } = useFineMonth(groupId, formattedMonth);
   // console.log(groupProblemMonth);
 
   const formatDay = (_locale: string | undefined, date: Date) =>
@@ -92,6 +130,10 @@ const CodeLayout = () => {
           ) : (
             <Text size='var(--size-xs)'>해당 월에는 휴일이 없습니다.</Text>
           )}
+          <MakeButton onClick={changeStateModal}>휴일 생성하기</MakeButton>
+          <MakeButton onClick={changeStateDeleteModal}>
+            휴일 삭제하기
+          </MakeButton>
           <Text size='var(--size-sm)' color='var(--color-black)' weight='700'>
             {formattedMonth} 벌금 명단 현황
           </Text>
@@ -116,8 +158,12 @@ const CodeLayout = () => {
           formattedDate={formattedDate}
         />
       ) : null}
+      {isModalOpen && <HolidayModal closeModal={changeStateModal} />}
+      {isDeleteModalOpen && (
+        <HolidayDeleteModal closeModal={changeStateDeleteModal} />
+      )}
     </ProfileLayout>
   );
 };
 
-export default CodeLayout;
+export default AdminCodeLayout;

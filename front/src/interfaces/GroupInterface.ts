@@ -44,3 +44,7 @@ export interface IGroupProblemProps {
   title: string;
   rank: string;
 }
+
+export interface IGroupHolidayProps {
+  holidays: string[];
+}

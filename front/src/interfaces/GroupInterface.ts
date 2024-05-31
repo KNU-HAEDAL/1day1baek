@@ -29,6 +29,7 @@ export interface ISelectUsersProps {
   loginId: string;
   name: string;
   profileUrl: string;
+  id: string;
 }
 
 export interface IGroupTeamProps {

@@ -46,4 +46,4 @@ jobs:
               echo $REMOTE_SSH_PASSWORD | sudo -S kill -9 $server_pid
             fi
 
-            ./run_sandbox.sh
+            ./run_prod.sh
